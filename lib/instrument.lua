@@ -62,9 +62,12 @@ function Instrument:bank_save(i)
 end
 
 function Instrument:bank_load(i)
-  if self.banks[i]~=nil then
-    self:load_patterns(self.banks[i])
+  if self.banks[i]==nil then
+    do return false end
   end
+
+  self:load_patterns(self.banks[i])
+  return true
 end
 
 function Instrument:dump_patterns()
@@ -76,11 +79,8 @@ function Instrument:dump_patterns()
 end
 
 function Instrument:load_patterns(d)
-  self.ptn={}
-  for _,s in ipairs(d) do
-    local p=slist:new()
-    p:decode(s)
-    table.insert(self.ptn,p)
+  for i,s in ipairs(d) do
+    self.ptn[i]:decode(s)
   end
 end
 

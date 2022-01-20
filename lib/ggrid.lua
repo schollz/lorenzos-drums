@@ -62,7 +62,7 @@ function GGrid:key_press(row,col,on)
     self.pressed_buttons[row..","..col]=true
     if row==7 then
       self.pressed_buttons[row..","..col]=clock.run(function()
-        clock.sleep(1)
+        clock.sleep(0.6)
         drm[g_sel_drm]:bank_save(col)
         self.just_saved=true
         msg("saved bank "..col)
@@ -70,25 +70,25 @@ function GGrid:key_press(row,col,on)
     end
   else
     if row==7 then
+      local saved=self.just_saved
       clock.cancel(self.pressed_buttons[row..","..col])
       self.just_saved=false
+      self.pressed_buttons[row..","..col]=nil
+      if saved then
+        do return end
+      end
     end
     self.pressed_buttons[row..","..col]=nil
-  end
-  if row==8 and col==16 then
-    if self.mode~=MODE_LENGTH then
-      self.mode_prev=self.mode
-      self.mode=MODE_LENGTH
-    else
-      self.mode=self.mode_prev
-    end
   end
   if not on then
     if row==7 then
       if self.just_saved==nil or self.just_saved==false then
         -- do a load
-        drm[g_sel_drm]:bank_save(col)
-        msg("loaded bank "..col)
+        if drm[g_sel_drm]:bank_load(col) then
+          msg("loaded bank "..col)
+        else
+          msg("no saved bank "..col)
+        end
       end
     end
     do
@@ -108,30 +108,25 @@ end
 
 function GGrid:change_mode(col)
   self.gesture_mode[col-14]=not self.gesture_mode[col-14]
-  if self.gesture_mode[1] and self.gesture_mode[2] then
+  if self.gesture_mode[1]==true and self.gesture_mode[2]==true then
     self.mode=MODE_INCREASE
-  elseif self.gesture_mode[1] and not self.gesture_mode[2] then
+  elseif self.gesture_mode[1]==true and self.gesture_mode[2]==false then
     self.mode=MODE_DECREASE
-  elseif not self.gesture_mode[1] and not self.gesture_mode[2] then
+  elseif self.gesture_mode[1]==false and self.gesture_mode[2]==false then
     self.mode=MODE_ERASE
   else
     self.mode=MODE_LENGTH
   end
 end
 
-function GGrid:set_mode(mode)
-  self.mode=mode
-end
-
 function GGrid:change_ptn(col)
-  self.mode=MODE_INCREASE
-  if col==9 then
+  if col==10 then
     g_sel_ptn=1
     do
       return
     end
   end
-  local i=2*(col-9)
+  local i=2*(col-10)
   if math.floor(i/2)==math.floor(g_sel_ptn/2) then
     -- toggle between increase/decrease of current pattern
     g_sel_ptn=g_sel_ptn+(g_sel_ptn%2==0 and 1 or-1)
@@ -213,6 +208,13 @@ function GGrid:get_visual()
     self.visual[8][10]=10
   else
     self.visual[8][math.floor(g_sel_ptn/2)+10]=g_sel_ptn%2==0 and 10 or 5
+  end
+
+  -- show saved banks
+  for i=1,16 do
+    if drm[g_sel_drm].banks[i]~=nil then
+      self.visual[7][i]=10
+    end
   end
 
   -- show mode

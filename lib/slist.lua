@@ -37,13 +37,17 @@ function Slist:encode()
 end
 
 function Slist:decode(s)
+  local start=self.start
+  local finnish=self.fiish
   local d=json.decode(s)
   if d~=nil then
     for k,v in pairs(d) do
       self[k]=v
     end
   end
-  self:update()
+  if self.start~=start or self.finish~=finish then
+    self:update()
+  end
 end
 
 function Slist:set_finish(n)
@@ -84,6 +88,7 @@ function Slist:update()
 end
 
 function Slist:reset()
+  print("resetting")
   self.cur=self.start
   self.seq:reset()
 end
