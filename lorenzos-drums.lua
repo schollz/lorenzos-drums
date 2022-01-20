@@ -98,9 +98,56 @@ function init()
   params:add_option("choose pattern","choose pattern",drum_pattern_options)
   params:add{type="binary",name="load pattern",id="load pattern",behavior="trigger",
     action=function(v)
+      print("uploading beat!")
       upload_beat(drum_patterns[drum_pattern_options[params:get("choose pattern")]])
     end
   }
+
+  params:add_group("mixer",#instruments)
+  for _, ins in ipairs(instruments) do
+    params:add{type="control",id=ins.."vol",name=ins,controlspec=controlspec.new(-96,36,'lin',0.1,0,'',0.1/(36+96)),formatter=function(v)
+      local val=math.floor(util.linlin(0,1,v.controlspec.minval,v.controlspec.maxval,v.raw)*10)/10
+      return ((val<0) and "" or "+")..val.." dB"
+    end
+  }
+    params:set_action(ins.."vol",function(x)
+      engine[ins.."_amp"](util.dbamp(x))
+    end)
+  end
+
+
+  local mics={
+    bd=3,
+    sd=3,
+    cs=3,
+    rc=3,
+    oh=2,
+    ch=2,
+    tom1=2,
+    tom2=2,
+    tom3=2,
+  }
+  local mic_names={"hat","snare","kick"}
+  for _, ins in ipairs(instruments) do 
+    local mic_num=mics[ins]
+    params:add_group(ins,mic_num+2)
+    for i=1,mic_num do
+      params:add{type="control",id=ins.."mic"..i,name=mic_names[i].." mic",controlspec=controlspec.new(-96,36,'lin',0.1,-9,'',0.1/(36+96)),formatter=function(v)
+          local val=math.floor(util.linlin(0,1,v.controlspec.minval,v.controlspec.maxval,v.raw)*10)/10
+          return ((val<0) and "" or "+")..val.." dB"
+        end
+      }
+      params:set_action(ins.."mic"..i,function(x)
+        if mic_num==2 then
+          engine[ins.."_mix"](util.dbamp(params:get(ins.."mic1")),util.dbamp(params:get(ins.."mic2")))
+        else
+          engine[ins.."_mix"](util.dbamp(params:get(ins.."mic1")),util.dbamp(params:get(ins.."mic2")),util.dbamp(params:get(ins.."mic3")))
+        end
+      end)    
+    end
+    params:add_control(ins.."reverbSend","reverb send",controlspec.new(0,100,"lin",1,0,"%",1/100))
+    params:add_control(ins.."delaySend","delay send",controlspec.new(0,100,"lin",1,0,"%",1/100))
+  end
 end
 
 function reset_instruments()
@@ -192,21 +239,7 @@ end
 function enc(k,d)
   if k>1 then
     if k==2 then
-      local foo=cursor[2]+d
-      if foo>16 then
-        cursor[1]=cursor[1]+1
-        if cursor[1]>7 then
-          cursor[1]=1
-        end
-        foo=1
-      elseif foo<1 then
-        cursor[1]=cursor[1]-1
-        if cursor[1]<1 then
-          cursor[1]=7
-        end
-        foo=16
-      end
-      cursor[2]=foo
+      cursor[3-(k-1)]=util.clamp(cursor[3-(k-1)]+d,1,k==2 and 16 or 7)
     else
       cursor[3-(k-1)]=util.clamp(cursor[3-(k-1)]-d,1,k==2 and 16 or 7)
     end

@@ -302,10 +302,10 @@ LorenzosDrums {
 		// basic players
 		
 		SynthDef("playx2",{
-			arg out=0,pan=0,amp=1.0,reverbOut,reverbSend=0,buf,t_trig=1,rate=1,fade_trig=0,fade_time=0.1,
+			arg out=0,pan=0,amp=1.0,reverbOut,reverbSend=0,buf,t_trig=1,rate=1,fade_trig=0,fade_time=0.1,startPos=0,
 			lpf=18000,busReverb,busDelay,sendReverb=0,sendDelay=0;
 			var snd;
-			snd=PlayBuf.ar(2,buf,rate,t_trig,doneAction:2);
+			snd=PlayBuf.ar(2,buf,rate,t_trig,startPos:startPos*BufFrames.ir(buf),doneAction:2);
 			DetectSilence.ar(snd,0.0001,doneAction:2);
 			snd=snd*EnvGen.ar(Env.new([1,0],[fade_time]),fade_trig,doneAction:2);
 			snd=Balance2.ar(snd[0],snd[1],pan,amp);
@@ -315,10 +315,10 @@ LorenzosDrums {
 		}).send(server);
 		
 		SynthDef("playx1",{
-			arg out=0,pan=0,amp=1.0,reverbOut,reverbSend=0,buf,t_trig=1,rate=1,fade_trig=0,fade_time=0.1,
+			arg out=0,pan=0,amp=1.0,reverbOut,reverbSend=0,buf,t_trig=1,rate=1,fade_trig=0,fade_time=0.1,startPos=0,
 			lpf=18000,busReverb,busDelay,sendReverb=0,sendDelay=0;
 			var snd;
-			snd=PlayBuf.ar(1,buf,rate,t_trig,doneAction:2);
+			snd=PlayBuf.ar(1,buf,rate,t_trig,startPos:startPos*BufFrames.ir(buf),doneAction:2);
 			DetectSilence.ar(snd,0.0001,doneAction:2);
 			snd=snd*EnvGen.ar(Env.new([1,0],[fade_time]),fade_trig,doneAction:2);
 			snd=Pan2.ar(snd,pan,amp);
@@ -352,7 +352,7 @@ LorenzosDrums {
 	
 	
 	playKick {
-		arg velocity, amp, pan, rate, lpf, sendReverb, sendDelay;
+		arg velocity, amp, pan, rate, lpf, sendReverb, sendDelay, startPos;
 		var triggered=false;
 		// <assignSamples>
 		var names=namesKick;
@@ -380,12 +380,12 @@ LorenzosDrums {
 			var buffer2=bufKick[i][buf2][bufKick[i][buf2].size.rand];
 			if (buffer1.numChannels.notNil,{
 				synKick.add(Synth.head(server,"playx"++buffer1.numChannels,[
-					\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixKick[i]*ampKick,\buf,buffer1
+					\t_trig,1,\startPos,startPos,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixKick[i]*ampKick,\buf,buffer1
 				]));
 			});
 			if (buffer2.numChannels.notNil,{
 				synKick.add(Synth.head(server,"playx"++buffer2.numChannels,[
-					\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf2Amp*mixKick[i]*ampKick,\buf,buffer2
+					\t_trig,1,\startPos,startPos,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf2Amp*mixKick[i]*ampKick,\buf,buffer2
 				]));
 			});
 		});
@@ -407,7 +407,7 @@ LorenzosDrums {
 	}
 	
 	playSnare {
-		arg velocity, amp, pan, rate, lpf, sendReverb, sendDelay;
+		arg velocity, amp, pan, rate, lpf, sendReverb, sendDelay, startPos;
 		var triggered=false;
 		// <assignSamples>
 		var names=namesSnare;
@@ -435,12 +435,12 @@ LorenzosDrums {
 			var buffer2=bufSnare[i][buf2][bufSnare[i][buf2].size.rand];
 			if (buffer1.numChannels.notNil,{
 				synSnare.add(Synth.head(server,"playx"++buffer1.numChannels,[
-					\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixSnare[i]*ampSnare,\buf,buffer1
+					\t_trig,1,\startPos,startPos,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixSnare[i]*ampSnare,\buf,buffer1
 				]));
 			});
 			if (buffer2.numChannels.notNil,{
 				synSnare.add(Synth.head(server,"playx"++buffer2.numChannels,[
-					\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf2Amp*mixSnare[i]*ampSnare,\buf,buffer2
+					\t_trig,1,\startPos,startPos,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf2Amp*mixSnare[i]*ampSnare,\buf,buffer2
 				]));
 			});
 		});
@@ -465,7 +465,7 @@ LorenzosDrums {
 	
 	
 	playCH {
-		arg velocity, amp, pan, rate, lpf, sendReverb, sendDelay;
+		arg velocity, amp, pan, rate, lpf, sendReverb, sendDelay, startPos;
 		var triggered=false;
 		var isrunning=false;
 		// <assignSamples>
@@ -499,16 +499,14 @@ LorenzosDrums {
 		namesMicCH.do({ arg name,i;
 			var buffer1=bufCH[i][buf1][bufCH[i][buf1].size.rand];
 			var buffer2=bufCH[i][buf2][bufCH[i][buf2].size.rand];
-			buffer1.postln;
-			buffer2.postln;
 			if (buffer1.numChannels.notNil,{
 				synCH.add(Synth.head(server,"playx"++buffer1.numChannels,[
-					\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixCH[i]*ampCH,\buf,buffer1
+					\t_trig,1,\startPos,startPos,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixCH[i]*ampCH,\buf,buffer1
 				]));
 			});
 			if (buffer2.numChannels.notNil,{
 				synCH.add(Synth.head(server,"playx"++buffer2.numChannels,[
-					\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf2Amp*mixCH[i]*ampCH,\buf,buffer2
+					\t_trig,1,\startPos,startPos,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf2Amp*mixCH[i]*ampCH,\buf,buffer2
 				]));
 			});
 		});
@@ -534,7 +532,7 @@ LorenzosDrums {
 	
 	
 	playOH {
-		arg velocity, amp, pan, rate, lpf, sendReverb, sendDelay;
+		arg velocity, amp, pan, rate, lpf, sendReverb, sendDelay, startPos;
 		var triggered=false;
 		var isrunning=false;
 		// <assignSamples>
@@ -569,12 +567,12 @@ LorenzosDrums {
 			var buffer2=bufOH[i][buf2][bufOH[i][buf2].size.rand];
 			if (buffer1.numChannels.notNil,{
 				synOH.add(Synth.head(server,"playx"++buffer1.numChannels,[
-					\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixOH[i]*ampOH,\buf,buffer1
+					\t_trig,1,\startPos,startPos,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixOH[i]*ampOH,\buf,buffer1
 				]));
 			});
 			if (buffer2.numChannels.notNil,{
 				synOH.add(Synth.head(server,"playx"++buffer2.numChannels,[
-					\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf2Amp*mixOH[i]*ampOH,\buf,buffer2
+					\t_trig,1,\startPos,startPos,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf2Amp*mixOH[i]*ampOH,\buf,buffer2
 				]));
 			});
 		});
@@ -597,7 +595,7 @@ LorenzosDrums {
 	}
 	
 	playTom1 {
-		arg velocity, amp, pan, rate, lpf, sendReverb, sendDelay;
+		arg velocity, amp, pan, rate, lpf, sendReverb, sendDelay, startPos;
 		var triggered=false;
 		// <assignSamples>
 		var names=namesTom1;
@@ -625,12 +623,12 @@ LorenzosDrums {
 			var buffer2=bufTom1[i][buf2][bufTom1[i][buf2].size.rand];
 			if (buffer1.numChannels.notNil,{
 				synTom1.add(Synth.head(server,"playx"++buffer1.numChannels,[
-					\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixTom1[i]*ampTom1,\buf,buffer1
+					\t_trig,1,\startPos,startPos,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixTom1[i]*ampTom1,\buf,buffer1
 				]));
 			});
 			if (buffer2.numChannels.notNil,{
 				synTom1.add(Synth.head(server,"playx"++buffer2.numChannels,[
-					\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf2Amp*mixTom1[i]*ampTom1,\buf,buffer2
+					\t_trig,1,\startPos,startPos,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf2Amp*mixTom1[i]*ampTom1,\buf,buffer2
 				]));
 			});
 		});
@@ -651,7 +649,7 @@ LorenzosDrums {
 	}
 	
 	playTom2 {
-		arg velocity, amp, pan, rate, lpf, sendReverb, sendDelay;
+		arg velocity, amp, pan, rate, lpf, sendReverb, sendDelay, startPos;
 		var triggered=false;
 		// <assignSamples>
 		var names=namesTom2;
@@ -679,12 +677,12 @@ LorenzosDrums {
 			var buffer2=bufTom2[i][buf2][bufTom2[i][buf2].size.rand];
 			if (buffer1.numChannels.notNil,{
 				synTom2.add(Synth.head(server,"playx"++buffer1.numChannels,[
-					\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixTom2[i]*ampTom2,\buf,buffer1
+					\t_trig,1,\startPos,startPos,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixTom2[i]*ampTom2,\buf,buffer1
 				]));
 			});
 			if (buffer2.numChannels.notNil,{
 				synTom2.add(Synth.head(server,"playx"++buffer2.numChannels,[
-					\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf2Amp*mixTom2[i]*ampTom2,\buf,buffer2
+					\t_trig,1,\startPos,startPos,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf2Amp*mixTom2[i]*ampTom2,\buf,buffer2
 				]));
 			});
 		});
@@ -707,7 +705,7 @@ LorenzosDrums {
 	}
 	
 	playTom3 {
-		arg velocity, amp, pan, rate, lpf, sendReverb, sendDelay;
+		arg velocity, amp, pan, rate, lpf, sendReverb, sendDelay, startPos;
 		var triggered=false;
 		// <assignSamples>
 		var names=namesTom3;
@@ -735,12 +733,12 @@ LorenzosDrums {
 			var buffer2=bufTom3[i][buf2][bufTom3[i][buf2].size.rand];
 			if (buffer1.numChannels.notNil,{
 				synTom3.add(Synth.head(server,"playx"++buffer1.numChannels,[
-					\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixTom3[i]*ampTom3,\buf,buffer1
+					\t_trig,1,\startPos,startPos,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixTom3[i]*ampTom3,\buf,buffer1
 				]));
 			});
 			if (buffer2.numChannels.notNil,{
 				synTom3.add(Synth.head(server,"playx"++buffer2.numChannels,[
-					\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf2Amp*mixTom3[i]*ampTom3,\buf,buffer2
+					\t_trig,1,\startPos,startPos,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf2Amp*mixTom3[i]*ampTom3,\buf,buffer2
 				]));
 			});
 		});
@@ -765,7 +763,7 @@ LorenzosDrums {
 	}
 	
 	playRide {
-		arg velocity, amp, pan, rate, lpf, sendReverb, sendDelay;
+		arg velocity, amp, pan, rate, lpf, sendReverb, sendDelay, startPos;
 		var triggered=false;
 		// <assignSamples>
 		var names=namesRide;
@@ -793,12 +791,12 @@ LorenzosDrums {
 			var buffer2=bufRide[i][buf2][bufRide[i][buf2].size.rand];
 			if (buffer2.numChannels.notNil,{
 				synRide.add(Synth.head(server,"playx"++buffer1.numChannels,[
-				\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixRide[i]*ampRide,\buf,buffer1
+				\t_trig,1,\startPos,startPos,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixRide[i]*ampRide,\buf,buffer1
 			]));
 			});
 			if (buffer2.numChannels.notNil,{
 			synRide.add(Synth.head(server,"playx"++buffer2.numChannels,[
-				\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf2Amp*mixRide[i]*ampRide,\buf,buffer2
+				\t_trig,1,\startPos,startPos,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf2Amp*mixRide[i]*ampRide,\buf,buffer2
 			]));
 			});
 		});
@@ -827,7 +825,7 @@ LorenzosDrums {
 	}
 	
 	playCS {
-		arg velocity, amp, pan, rate, lpf, sendReverb, sendDelay;
+		arg velocity, amp, pan, rate, lpf, sendReverb, sendDelay, startPos;
 		var triggered=false;
 		// <assignSamples>
 		var names=namesCS;
@@ -855,12 +853,12 @@ LorenzosDrums {
 			var buffer2=bufCS[i][buf2][bufCS[i][buf2].size.rand];
 			if (buffer2.numChannels.notNil,{
 				synCS.add(Synth.head(server,"playx"++buffer1.numChannels,[
-				\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixCS[i]*ampCS,\buf,buffer1
+				\t_trig,1,\startPos,startPos,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixCS[i]*ampCS,\buf,buffer1
 			]));
 			});
 			if (buffer2.numChannels.notNil,{
 			synCS.add(Synth.head(server,"playx"++buffer2.numChannels,[
-				\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf2Amp*mixCS[i]*ampCS,\buf,buffer2
+				\t_trig,1,\startPos,startPos,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf2Amp*mixCS[i]*ampCS,\buf,buffer2
 			]));
 			});
 		});

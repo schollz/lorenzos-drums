@@ -95,11 +95,13 @@ function Instrument:emit()
   for _,p in ipairs(self.ptn) do
     p:iterate()
   end
-  if self.ptn[1]:raw_val()==0 or self.muted then
+  local skip=math.random()<self.ptn[9]:val()
+  if self.ptn[1]:raw_val()==0 or self.muted or skip then
     do
       return
     end
   end
+
   local velocity=self.ptn[1]:val()+self.ptn[2]:val()+self.ptn[3]:val()
   local velocity_min_max={util.clamp(velocity-7,0,127),util.clamp(velocity+7,0,127)}
   velocity=math.random()*(velocity_min_max[2]-velocity_min_max[1])+velocity_min_max[1]
@@ -107,13 +109,19 @@ function Instrument:emit()
   local pan=self.ptn[4]:val()+self.ptn[5]:val()
   local rate=1+self.ptn[6]:val()+self.ptn[7]:val()
   local lpf=18000
-  local sendReverb=0.0
-  local sendDelay=0.0
+  local sendReverb=params:get(self.name.."reverbSend")/100
+  local sendDelay=params:get(self.name.."delaySend")/100
+  local reversed=self.ptn[8]:val()>0 
+  local startPos = 0
+  if reversed then
+    rate = math.abs(rate) * -1
+    startPos=math.random()*0.2+0.1
+  end
   -- TODO implement prob and reverse
   self.playing=true
   self.show=true
-  -- print(self.name,velocity,amp,pan,rate,lpf,sendReverb,sendDelay)
-  engine[self.name](velocity,amp,pan,rate,lpf,sendReverb,sendDelay)
+  --print(self.name,velocity,amp,pan,rate,lpf,sendReverb,sendDelay,startPos)
+  engine[self.name](velocity,amp,pan,rate,lpf,sendReverb,sendDelay,startPos)
 end
 
 return Instrument
