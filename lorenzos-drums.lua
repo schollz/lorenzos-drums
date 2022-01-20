@@ -14,7 +14,7 @@ local message_text=""
 local message_count=0
 drm={}
 props={"velocity","accent +","accent -","pan right","pan left","rate up","rate down","reverse","skip %"}
-instruments={"bd","sd","ch","oh","rc","tom1","tom2","tom3"}
+instruments={"bd","sd","cs","ch","oh","rc","tom1","tom2","tom3"}
 
 function init()
   if not util.file_exists(_path.audio.."lorenzos-drums") then
@@ -117,7 +117,7 @@ function upload_beat(s)
   reset_instruments()
 
   local beat=collect_beat(s)
-  local ins_alias={bd=1,sd=2,hh=3,ch=3,oh=4,rc=5,tom1=6,t1=6,tom2=7,t2=7,tom3=8,t3=8}
+  local ins_alias={bd=1,sd=2,cs=3,hh=4,ch=4,oh=5,rc=6,tom1=7,t1=7,tom2=8,t2=8,tom3=9,t3=9}
 
   for _,v in ipairs(beat) do
     local i=ins_alias[v.name]
@@ -181,17 +181,31 @@ local loaded_num=0
 function osc.event(path,args,from)
   if path=="done" then
     msg("samples loaded.",10)
+    upload_beat(drum_patterns["weird fishes"])
   elseif path=="load" then
     loaded_num=loaded_num+1
-    msg("loaded "..math.floor(loaded_num/220*100).."% samples...")
+    msg("loaded "..math.floor(loaded_num/265*100).."% samples...")
   end
 end
 
 function enc(k,d)
   if k>1 then
     if k==2 then
-      cursor[3-(k-1)]=util.clamp(cursor[3-(k-1)]+d,1,k==2 and 16 or 7)
-
+      local foo=cursor[2]+d
+      if foo>16 then
+        cursor[1]=cursor[1]+1
+        if cursor[1]>7 then
+          cursor[1]=1
+        end
+        foo=1
+      elseif foo<1 then
+        cursor[1]=cursor[1]-1
+        if cursor[1]<1 then
+          cursor[1]=7
+        end
+        foo=16
+      end
+      cursor[2]=foo
     else
       cursor[3-(k-1)]=util.clamp(cursor[3-(k-1)]-d,1,k==2 and 16 or 7)
     end
@@ -336,9 +350,10 @@ function draw_drums()
     local d=drm[i]
     local v=d.name..(d.show and "2" or "1")
     if d.name=="oh" and not d.playing then
+    elseif d.name=="sd" and not d.playing then
     else
       screen.display_png("/home/we/dust/code/lorenzos-drums/img/"..v..".png",0,0)
-      if g_sel_drm==i or (g_sel_drm==3 and i==4) then
+      if g_sel_drm==i or (g_sel_drm==4 and i==5) or (g_sel_drm==2 and i==3) then
         for j=1,2 do
           screen.update()
           screen.blend_mode(2)

@@ -72,6 +72,13 @@ LorenzosDrums {
 	var namesMicRide;
 	var fileLoadCount=0;
 	
+	// the crossstick CS
+	var mixCS;
+	var namesCS;
+	var bufCS;
+	var <synCS;
+	var ampCS;
+	var namesMicCS;
 	
 	*new {
 		arg serverName,folderToSamples;
@@ -245,7 +252,7 @@ LorenzosDrums {
 			mixTom3=Array.fill(namesMicTom3.size,{1/namesMicTom3.size});
 			
 			
-			
+						
 			// Ride
 			namesMicRide=["hat","snare","kick"];
 			namesRide=[
@@ -264,6 +271,28 @@ LorenzosDrums {
 			ampRide=1.0;
 			mixRide=Array.fill(namesMicRide.size,{1/namesMicRide.size});
 			
+			// CS
+			namesMicCS=["hat","snare","kick"];
+			namesCS=[
+				["cs1","cs2","cs3"],
+				["cs4","cs5","cs6"],
+				["cs7","cs8","cs9"],
+				["cs10","cs11","cs12"],
+				["cs13","cs14","cs15"],
+			];
+			bufCS=Array.fill(namesMicCS.size,{arg h;
+				Array.fill(namesCS.size,{ arg i;
+					Array.fill(namesCS[i].size,{ arg j;
+						server.sync; Buffer.read(server,folderToSamples++Platform.pathSeparator++namesMicCS[h]++Platform.pathSeparator++namesCS[i][j]++".wav",action:{arg fname; NetAddr("127.0.0.1",10111).sendMsg("load",1);});
+					});
+				});
+				
+			});
+			ampCS=1.0;
+			mixCS=Array.fill(namesMicCS.size,{1/namesMicCS.size});
+
+
+
 			server.sync;
 			"samples loaded!".postln;
 			NetAddr("127.0.0.1", 10111).sendMsg("done",1);   
@@ -777,6 +806,68 @@ LorenzosDrums {
 			NodeWatcher.register(syn);
 		});
 	}
+
+
+
+
+
+
+	
+	
+	setMixCS {
+		arg hat,snare,kick;
+		mixCS[0]=hat;
+		mixCS[1]=snare;
+		mixCS[2]=kick;
+	}
+	
+	setAmpCS {
+		arg amp;
+		ampCS=amp;
+	}
+	
+	playCS {
+		arg velocity, amp, pan, rate, lpf, sendReverb, sendDelay;
+		var triggered=false;
+		// <assignSamples>
+		var names=namesCS;
+		var buf1,buf2,buf1Amp,buf2Amp;
+		var availableVelocities=Array.fill(names.size-2,{arg i;
+			(i+1)/(names.size-1)*128
+		});
+		availableVelocities=availableVelocities.add(128);
+		availableVelocities=availableVelocities.addFirst(-1);
+		buf1=availableVelocities.indexOfGreaterThan(velocity)-1;
+		buf1Amp=(availableVelocities[buf1+1]-velocity)/(availableVelocities[buf1+1]-availableVelocities[buf1]);
+		buf2Amp=1-buf1Amp;
+		buf2=buf1+1;
+		// </assignSamples>
+		
+		// stop all
+		synCS.do({ arg syn,i;
+			if (syn.isRunning,{
+				syn.set(\fade_trig,1,\rate,-1);
+			});
+		});
+		synCS=Array.new(namesMicCS.size*2);
+		namesMicCS.do({ arg name,i;
+			var buffer1=bufCS[i][buf1][bufCS[i][buf1].size.rand];
+			var buffer2=bufCS[i][buf2][bufCS[i][buf2].size.rand];
+			if (buffer2.numChannels.notNil,{
+				synCS.add(Synth.head(server,"playx"++buffer1.numChannels,[
+				\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixCS[i]*ampCS,\buf,buffer1
+			]));
+			});
+			if (buffer2.numChannels.notNil,{
+			synCS.add(Synth.head(server,"playx"++buffer2.numChannels,[
+				\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf2Amp*mixCS[i]*ampCS,\buf,buffer2
+			]));
+			});
+		});
+		synCS.do({ arg syn,i;
+			NodeWatcher.register(syn);
+		});
+	}
 	
 	
 	free {
@@ -825,6 +916,12 @@ LorenzosDrums {
 		});
 		server.sync;
 		synRide.do({ arg syn,i;
+			if (syn.isRunning,{
+				syn.free;
+			});
+		});
+		server.sync;
+		synCS.do({ arg syn,i;
 			if (syn.isRunning,{
 				syn.free;
 			});
@@ -890,6 +987,14 @@ LorenzosDrums {
 		bufRide.do({ arg v1,i1;
 			bufRide[i1].do({ arg v2, i2;
 				bufRide[i1][i2].do({ arg v3, i3;
+					v3.free;
+				});
+			});
+		});
+		server.sync;
+		bufCS.do({ arg v1,i1;
+			bufCS[i1].do({ arg v2, i2;
+				bufCS[i1][i2].do({ arg v3, i3;
 					v3.free;
 				});
 			});

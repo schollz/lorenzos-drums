@@ -44,11 +44,30 @@ Engine_LorenzosDrums : CroneEngine {
 			});
 		});
 
+		this.addCommand("cs", "fffffff", { arg msg;
+			if (lorenzosDrums.notNil,{
+				lorenzosDrums.playCS(msg[1],msg[2],msg[3],msg[4],msg[5],msg[6],msg[7]);
+			});
+		});
+
+		this.addCommand("cs_mix", "fff", { arg msg;
+			if (lorenzosDrums.notNil,{
+				lorenzosDrums.setMixCS(msg[1],msg[2],msg[3]);
+			});
+		});
+
+		this.addCommand("cs_amp", "f", { arg msg;
+			if (lorenzosDrums.notNil,{
+				lorenzosDrums.setAmpCS(msg[1]);
+			});
+		});
+
 		this.addCommand("rc", "fffffff", { arg msg;
 			if (lorenzosDrums.notNil,{
 				lorenzosDrums.playRide(msg[1],msg[2],msg[3],msg[4],msg[5],msg[6],msg[7]);
 			});
 		});
+		
 		this.addCommand("oh", "fffffff", { arg msg;
 			if (lorenzosDrums.notNil,{
 				lorenzosDrums.playOH(msg[1],msg[2],msg[3],msg[4],msg[5],msg[6],msg[7]);
