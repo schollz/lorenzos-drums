@@ -11,11 +11,14 @@ local cursor={1,1,false}
 local shift=false
 local message_text=""
 local message_count=0
+drm={}
+props={"velocity","accent +","accent -","pan right","pan left","rate up","rate down","reverse","skip %"}
+instruments={"bd","sd","ch","oh","rc","tom1","tom2","tom3"}
 
 function init()
   if not util.file_exists(_path.audio.."lorenzos-drums") then
     msg("downloading samples...",1000)
-    norns.system_cmd("cd ~/dust/audio && wget -q https://github.com/schollz/lorenzos-drums/releases/download/samples/lorenzos-drums.tar && tar -xvf lorenzos-drums.tar && rm lorenzos-drums.tar",function(x)
+    norns.system_cmd("cd ~/dust/audio && wget -q https://github.com/schollz/lorenzos-drums/releases/download/samples/lorenzos-drums.tar.gz && tar -xzvf lorenzos-drums.tar.gz && rm lorenzos-drums.tar.gz",function(x)
       msg("downloaded samples.",10)
       engine.init()
     end)
@@ -29,15 +32,7 @@ function init()
   g_sel_ptn=1
 
   -- initialize drm / ptn
-  drm={}
-  props={"velocity","accent +","accent -","pan right","pan left","rate up","rate down","reverse","skip %"}
-  instruments={"bd","sd","ch","oh","rc","tom1","tom2","tom3"}
-  for i,name in ipairs(instruments) do
-    table.insert(drm,instrument_:new({
-      id=i,
-      name=name
-    }))
-  end
+  reset_instruments()
 
   -- initialize grid
   g_=ggrid:new()
@@ -52,80 +47,6 @@ function init()
       end,
       division=1/16
     }
-  end
-
-  -- demo
-  local part=1
-  local d=1
-  local ptn={1,3,11,12}
-  for i,p in ipairs(ptn) do
-    drm[d].ptn[1].data[p+(part-1)*16]=6-i
-  end
-  local part=2
-  for i,p in ipairs(ptn) do
-    drm[d].ptn[1].data[p+(part-1)*16]=5-i
-  end
-  ptn={1,3,11}
-  local part=3
-  for i,p in ipairs(ptn) do
-    drm[d].ptn[1].data[p+(part-1)*16]=5-i
-  end
-  local part=4
-  ptn={3,4,11}
-  for i,p in ipairs(ptn) do
-    drm[d].ptn[1].data[p+(part-1)*16]=7-i
-  end
-  drm[d].ptn[1].finish=16*4
-  drm[d].ptn[1]:update()
-
-  part=1
-  d=2
-  ptn={5,8,10,13,16}
-  for i,p in ipairs(ptn) do
-    drm[d].ptn[1].data[p+(part-1)*16]=3+i/2
-  end
-  local part=2
-  for i,p in ipairs(ptn) do
-    drm[d].ptn[1].data[p+(part-1)*16]=3+i/3
-  end
-  ptn={5,8,10,15}
-  local part=3
-  for i,p in ipairs(ptn) do
-    drm[d].ptn[1].data[p+(part-1)*16]=3+i/4
-  end
-  local part=4
-  ptn={2,5,8,10,12,13,14,15,16}
-  for i,p in ipairs(ptn) do
-    drm[d].ptn[1].data[p+(part-1)*16]=3+i
-  end
-  drm[d].ptn[1].finish=16*4
-  drm[d].ptn[1]:update()
-
-  part=1
-  d=5
-  ptn={1}
-  for _,p in ipairs(ptn) do
-    drm[d].ptn[1].data[p+(part-1)*16]=3
-  end
-  drm[d].ptn[1].finish=2
-  drm[d].ptn[1]:update()
-
-  part=1
-  d=4
-  ptn={16*3+15}
-  for _,p in ipairs(ptn) do
-    drm[d].ptn[1].data[p+(part-1)*16]=3
-  end
-  drm[d].ptn[1].finish=16*4
-  drm[d].ptn[1]:update()
-
-  for d=6,8 do
-    ptn={math.random(32,64),math.random(32,64),math.random(32,64),math.random(20,64)}
-    for _,p in ipairs(ptn) do
-      drm[d].ptn[1].data[p]=math.random(1,3)
-    end
-    drm[d].ptn[1].finish=16*4-math.random(1,20)
-    drm[d].ptn[1]:update()
   end
 
   -- setup the redrawing
@@ -168,6 +89,112 @@ function init()
 
 end
 
+function reset_instruments()
+  local foo={}
+  for i,name in ipairs(instruments) do
+    table.insert(foo,instrument_:new({
+      id=i,
+      name=name
+    }))
+  end
+  drm=foo
+end
+
+function weird_fishes()
+  upload_beat([[
+  bd x-----xx--
+  rc --x--x--x-
+  sd --x-x-x-x-
+  sd --x--x--x-
+  ch x-x-x-xxx-
+  ]])
+end
+
+function amen_brother()
+  upload_beat([[
+  bd x-x-------xx----
+  sd ----x--x-x--x--x
+  rc x-x-x-x-x-x-x-x-
+  oh ----------------
+  hh ----------------
+  t1 ----------------
+  t2 ----------------
+  t3 ----------------
+  bd x-x-------xx----
+  sd ----x--x-x--x--x
+  rc x-x-x-x-x-x-x-x-
+  oh ----------------
+  hh ----------------
+  t1 ----------------
+  t2 ----------------
+  t3 ----------------
+  bd x-x-------x-----
+  sd ----x--x-x-----x
+  rc x-x-x-x-x-x-x-x-
+  oh ----------------
+  hh ----------------
+  t1 ----------------
+  t2 ----------------
+  t3 ----------------
+  bd --xx------x-----
+  sd -x--x--x-x----x-
+  rc x-x-x-x-x---x-x-
+  oh ----------x-----
+  hh -----------x----
+  t1 ---------xx-----
+  t2 -----------xx---
+  t3 -------------xxx
+  ]])
+end
+
+function upload_beat(s)
+  reset_instruments()
+
+  local beat=collect_beat(s)
+  local ins_alias={bd=1,sd=2,hh=3,ch=3,oh=4,rc=5,tom1=6,t1=6,tom2=7,t2=7,tom3=8,t3=8}
+
+  for _,v in ipairs(beat) do
+    local i=ins_alias[v.name]
+    if i~=nil then
+      drm[i].ptn[1].finish=v.len
+      local row=1
+      for _,pos in ipairs(v.pos) do
+        drm[i].ptn[1].data[pos]=math.random(1,i==2 and 2 or 4)
+      end
+      drm[i].ptn[1]:update()
+    end
+  end
+end
+
+function collect_beat(s)
+  local tabs={}
+  for line in string.gmatch(s,'[^\r\n]+') do
+    local words={}
+    for w in line:gmatch("%S+") do
+      table.insert(words,w)
+    end
+    if words[1]~=nil then
+      if tabs[words[1]]==nil then
+        tabs[words[1]]=""
+      end
+      tabs[words[1]]=tabs[words[1]]..words[2]
+    end
+  end
+
+  local hits={}
+  for k,v in pairs(tabs) do
+    local hit={}
+    for i=1,#v do
+      local c=v:sub(i,i)
+      if c~="-" then
+        table.insert(hit,i)
+      end
+    end
+    table.insert(hits,{name=k,pos=hit,len=#v})
+  end
+  return hits
+end
+
 function msg(s,t)
   message_text=s
   message_count=t or 20
@@ -188,6 +215,7 @@ local loaded_num=0
 function osc.event(path,args,from)
   if path=="done" then
     msg("samples loaded.",10)
+    weird_fishes()
   elseif path=="load" then
     loaded_num=loaded_num+1
     msg("loaded "..math.floor(loaded_num/220*100).."% samples...")
@@ -210,6 +238,9 @@ function enc(k,d)
     else
       g_sel_drm=util.clamp(g_sel_drm+d,1,8)
     end
+  end
+  if show_grid>0 then
+    show_grid=30
   end
 end
 

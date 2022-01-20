@@ -107,7 +107,7 @@ LorenzosDrums {
 			bufKick=Array.fill(namesMicKick.size,{arg h;
 				Array.fill(namesKick.size,{ arg i;
 					Array.fill(namesKick[i].size,{ arg j;
-						server.sync; Buffer.read(server,folderToSamples++Platform.pathSeparator++namesMicKick[h]++Platform.pathSeparator++namesKick[i][j]++".flac",action:{arg fname; NetAddr("127.0.0.1",10111).sendMsg("load",1);});
+						server.sync; Buffer.read(server,folderToSamples++Platform.pathSeparator++namesMicKick[h]++Platform.pathSeparator++namesKick[i][j]++".wav",action:{arg fname; NetAddr("127.0.0.1",10111).sendMsg("load",1);});
 					});
 				});
 				
@@ -128,7 +128,7 @@ LorenzosDrums {
 			bufSnare=Array.fill(namesMicSnare.size,{arg h;
 				Array.fill(namesSnare.size,{ arg i;
 					Array.fill(namesSnare[i].size,{ arg j;
-						server.sync; Buffer.read(server,folderToSamples++Platform.pathSeparator++namesMicSnare[h]++Platform.pathSeparator++namesSnare[i][j]++".flac",action:{arg fname; NetAddr("127.0.0.1",10111).sendMsg("load",1);});
+						server.sync; Buffer.read(server,folderToSamples++Platform.pathSeparator++namesMicSnare[h]++Platform.pathSeparator++namesSnare[i][j]++".wav",action:{arg fname; NetAddr("127.0.0.1",10111).sendMsg("load",1);});
 					});
 				});
 				
@@ -150,7 +150,7 @@ LorenzosDrums {
 			bufCH=Array.fill(namesMicCH.size,{arg h;
 				Array.fill(namesCH.size,{ arg i;
 					Array.fill(namesCH[i].size,{ arg j;
-						server.sync; Buffer.read(server,folderToSamples++Platform.pathSeparator++namesMicCH[h]++Platform.pathSeparator++namesCH[i][j]++".flac",action:{arg fname; NetAddr("127.0.0.1",10111).sendMsg("load",1);});
+						server.sync; Buffer.read(server,folderToSamples++Platform.pathSeparator++namesMicCH[h]++Platform.pathSeparator++namesCH[i][j]++".wav",action:{arg fname; NetAddr("127.0.0.1",10111).sendMsg("load",1);});
 					});
 				});
 				
@@ -174,7 +174,7 @@ LorenzosDrums {
 			bufOH=Array.fill(namesMicOH.size,{arg h;
 				Array.fill(namesOH.size,{ arg i;
 					Array.fill(namesOH[i].size,{ arg j;
-						server.sync; Buffer.read(server,folderToSamples++Platform.pathSeparator++namesMicOH[h]++Platform.pathSeparator++namesOH[i][j]++".flac",action:{arg fname; NetAddr("127.0.0.1",10111).sendMsg("load",1);});
+						server.sync; Buffer.read(server,folderToSamples++Platform.pathSeparator++namesMicOH[h]++Platform.pathSeparator++namesOH[i][j]++".wav",action:{arg fname; NetAddr("127.0.0.1",10111).sendMsg("load",1);});
 					});
 				});
 				
@@ -194,7 +194,7 @@ LorenzosDrums {
 			bufTom1=Array.fill(namesMicTom1.size,{arg h;
 				Array.fill(namesTom1.size,{ arg i;
 					Array.fill(namesTom1[i].size,{ arg j;
-						server.sync; Buffer.read(server,folderToSamples++Platform.pathSeparator++namesMicTom1[h]++Platform.pathSeparator++namesTom1[i][j]++".flac",action:{arg fname; NetAddr("127.0.0.1",10111).sendMsg("load",1);});
+						server.sync; Buffer.read(server,folderToSamples++Platform.pathSeparator++namesMicTom1[h]++Platform.pathSeparator++namesTom1[i][j]++".wav",action:{arg fname; NetAddr("127.0.0.1",10111).sendMsg("load",1);});
 					});
 				});
 				
@@ -215,7 +215,7 @@ LorenzosDrums {
 			bufTom2=Array.fill(namesMicTom2.size,{arg h;
 				Array.fill(namesTom2.size,{ arg i;
 					Array.fill(namesTom2[i].size,{ arg j;
-						server.sync; Buffer.read(server,folderToSamples++Platform.pathSeparator++namesMicTom2[h]++Platform.pathSeparator++namesTom2[i][j]++".flac",action:{arg fname; NetAddr("127.0.0.1",10111).sendMsg("load",1);});
+						server.sync; Buffer.read(server,folderToSamples++Platform.pathSeparator++namesMicTom2[h]++Platform.pathSeparator++namesTom2[i][j]++".wav",action:{arg fname; NetAddr("127.0.0.1",10111).sendMsg("load",1);});
 					});
 				});
 				
@@ -236,7 +236,7 @@ LorenzosDrums {
 			bufTom3=Array.fill(namesMicTom3.size,{arg h;
 				Array.fill(namesTom3.size,{ arg i;
 					Array.fill(namesTom3[i].size,{ arg j;
-						server.sync; Buffer.read(server,folderToSamples++Platform.pathSeparator++namesMicTom3[h]++Platform.pathSeparator++namesTom3[i][j]++".flac",action:{arg fname; NetAddr("127.0.0.1",10111).sendMsg("load",1);});
+						server.sync; Buffer.read(server,folderToSamples++Platform.pathSeparator++namesMicTom3[h]++Platform.pathSeparator++namesTom3[i][j]++".wav",action:{arg fname; NetAddr("127.0.0.1",10111).sendMsg("load",1);});
 					});
 				});
 				
@@ -256,7 +256,7 @@ LorenzosDrums {
 			bufRide=Array.fill(namesMicRide.size,{arg h;
 				Array.fill(namesRide.size,{ arg i;
 					Array.fill(namesRide[i].size,{ arg j;
-						server.sync; Buffer.read(server,folderToSamples++Platform.pathSeparator++namesMicRide[h]++Platform.pathSeparator++namesRide[i][j]++".flac",action:{arg fname; NetAddr("127.0.0.1",10111).sendMsg("load",1);});
+						server.sync; Buffer.read(server,folderToSamples++Platform.pathSeparator++namesMicRide[h]++Platform.pathSeparator++namesRide[i][j]++".wav",action:{arg fname; NetAddr("127.0.0.1",10111).sendMsg("load",1);});
 					});
 				});
 				
@@ -279,7 +279,6 @@ LorenzosDrums {
 			snd=PlayBuf.ar(2,buf,rate,t_trig,doneAction:2);
 			DetectSilence.ar(snd,0.0001,doneAction:2);
 			snd=snd*EnvGen.ar(Env.new([1,0],[fade_time]),fade_trig,doneAction:2);
-			snd=LPF.ar(snd,lpf);
 			snd=Balance2.ar(snd[0],snd[1],pan,amp);
 			Out.ar(out,snd);
 			Out.ar(busReverb,snd*sendReverb);
@@ -293,7 +292,6 @@ LorenzosDrums {
 			snd=PlayBuf.ar(1,buf,rate,t_trig,doneAction:2);
 			DetectSilence.ar(snd,0.0001,doneAction:2);
 			snd=snd*EnvGen.ar(Env.new([1,0],[fade_time]),fade_trig,doneAction:2);
-			snd=LPF.ar(snd,lpf);
 			snd=Pan2.ar(snd,pan,amp);
 			Out.ar(out,snd);
 			Out.ar(busReverb,snd*sendReverb);
@@ -472,6 +470,8 @@ LorenzosDrums {
 		namesMicCH.do({ arg name,i;
 			var buffer1=bufCH[i][buf1][bufCH[i][buf1].size.rand];
 			var buffer2=bufCH[i][buf2][bufCH[i][buf2].size.rand];
+			buffer1.postln;
+			buffer2.postln;
 			if (buffer1.numChannels.notNil,{
 				synCH.add(Synth.head(server,"playx"++buffer1.numChannels,[
 					\t_trig,1,\busReverb,busReverb,\sendReverb,sendReverb,\busDelay,busDelay,\sendDelay,sendDelay,\pan,pan,\rate,rate,\lpf,lpf,\amp,amp*buf1Amp*mixCH[i]*ampCH,\buf,buffer1

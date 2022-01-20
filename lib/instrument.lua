@@ -112,6 +112,7 @@ function Instrument:emit()
   -- TODO implement prob and reverse
   self.playing=true
   self.show=true
+  -- print(self.name,velocity,amp,pan,rate,lpf,sendReverb,sendDelay)
   engine[self.name](velocity,amp,pan,rate,lpf,sendReverb,sendDelay)
 end
 
