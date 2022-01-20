@@ -5,7 +5,7 @@ Engine_LorenzosDrums : CroneEngine {
 	alloc { 
 
 		this.addCommand("init","", { arg msg;
-			lorenzosDrums=LorenzosDrums.new(Server.default,"/home/we/dust/code/lorenzos-drums/set1/");
+			lorenzosDrums=LorenzosDrums.new(Server.default,"/home/we/dust/audio/lorenzos-drums/");
 		});
 
 		this.addCommand("bd", "fffffff", { arg msg;

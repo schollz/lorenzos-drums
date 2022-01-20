@@ -20,6 +20,7 @@ function init()
       engine.init()
     end)
   else
+    msg("loading samples...",100)
     engine.init()
   end
 
@@ -165,7 +166,6 @@ function init()
     end
   end
 
-  msg("loading samples...",100)
 end
 
 function msg(s,t)
