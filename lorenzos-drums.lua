@@ -123,11 +123,11 @@ function upload_beat(s)
     local i=ins_alias[v.name]
     if i~=nil then
       drm[i].ptn[1].finish=v.len
+      drm[i].ptn[1]:update()
       local row=1
       for _,pos in ipairs(v.pos) do
         drm[i].ptn[1].data[pos]=math.random(1,i==2 and 2 or 4)
       end
-      drm[i].ptn[1]:update()
     end
   end
 end
