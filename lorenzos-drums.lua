@@ -6,6 +6,7 @@ json=require("cjson")
 lattice_=require("lattice")
 instrument_=include("lorenzos-drums/lib/instrument")
 ggrid=include("lorenzos-drums/lib/ggrid")
+drum_patterns=include("lorenzos-drums/lib/patterns")
 engine.name="LorenzosDrums"
 local cursor={1,1,false}
 local shift=false
@@ -87,6 +88,18 @@ function init()
     end
   end
 
+  -- setup parameters
+  local drum_pattern_options={}
+  for k,_ in pairs(drum_patterns) do
+    table.insert(drum_pattern_options,k)
+  end
+  table.sort(drum_pattern_options)
+  params:add_option("choose pattern","choose pattern",drum_pattern_options)
+  params:add{type="binary",name="load pattern",id="load pattern",behavior="trigger",
+    action=function(v)
+      upload_beat(drum_patterns[drum_pattern_options[params:get("choose pattern")]])
+    end
+  }
 end
 
 function reset_instruments()
@@ -98,53 +111,6 @@ function reset_instruments()
     }))
   end
   drm=foo
-end
-
-function weird_fishes()
-  upload_beat([[
-  bd x-----xx--
-  rc --x--x--x-
-  sd --x-x-x-x-
-  sd --x--x--x-
-  ch x-x-x-xxx-
-  ]])
-end
-
-function amen_brother()
-  upload_beat([[
-  bd x-x-------xx----
-  sd ----x--x-x--x--x
-  rc x-x-x-x-x-x-x-x-
-  oh ----------------
-  hh ----------------
-  t1 ----------------
-  t2 ----------------
-  t3 ----------------
-  bd x-x-------xx----
-  sd ----x--x-x--x--x
-  rc x-x-x-x-x-x-x-x-
-  oh ----------------
-  hh ----------------
-  t1 ----------------
-  t2 ----------------
-  t3 ----------------
-  bd x-x-------x-----
-  sd ----x--x-x-----x
-  rc x-x-x-x-x-x-x-x-
-  oh ----------------
-  hh ----------------
-  t1 ----------------
-  t2 ----------------
-  t3 ----------------
-  bd --xx------x-----
-  sd -x--x--x-x----x-
-  rc x-x-x-x-x---x-x-
-  oh ----------x-----
-  hh -----------x----
-  t1 ---------xx-----
-  t2 -----------xx---
-  t3 -------------xxx
-  ]])
 end
 
 function upload_beat(s)
@@ -215,7 +181,6 @@ local loaded_num=0
 function osc.event(path,args,from)
   if path=="done" then
     msg("samples loaded.",10)
-    weird_fishes()
   elseif path=="load" then
     loaded_num=loaded_num+1
     msg("loaded "..math.floor(loaded_num/220*100).."% samples...")
