@@ -106,15 +106,15 @@ function Instrument:emit()
   local velocity_min_max={util.clamp(velocity-7,0,127),util.clamp(velocity+7,0,127)}
   velocity=math.random()*(velocity_min_max[2]-velocity_min_max[1])+velocity_min_max[1]
   local amp=1 -- to be set in parameters
-  local pan=self.ptn[4]:val()+self.ptn[5]:val()
-  local rate=1+self.ptn[6]:val()+self.ptn[7]:val()
+  local pan=util.clamp(params:get(self.name.."pan")+self.ptn[4]:val()+self.ptn[5]:val(),-1,1)
+  local rate=params:get(self.name.."rate")+self.ptn[6]:val()+self.ptn[7]:val()
   local lpf=18000
   local sendReverb=params:get(self.name.."reverbSend")/100
   local sendDelay=params:get(self.name.."delaySend")/100
-  local reversed=self.ptn[8]:val()>0 
-  local startPos = 0
+  local reversed=self.ptn[8]:val()>0
+  local startPos=0
   if reversed then
-    rate = math.abs(rate) * -1
+    rate=math.abs(rate)*-1
     startPos=math.random()*0.2+0.1
   end
   -- TODO implement prob and reverse

@@ -123,57 +123,57 @@ Engine_LorenzosDrums : CroneEngine {
 		});
 
 
-		this.addCommand("tom1", "ffffffff", { arg msg;
+		this.addCommand("ht", "ffffffff", { arg msg;
 			if (lorenzosDrums.notNil,{
 				lorenzosDrums.playTom1(msg[1],msg[2],msg[3],msg[4],msg[5],msg[6],msg[7],msg[8]);
 			});
 		});
 
-		this.addCommand("tom1_mix", "ff", { arg msg;
+		this.addCommand("ht_mix", "ff", { arg msg;
 			if (lorenzosDrums.notNil,{
 				lorenzosDrums.setMixTom1(msg[1],msg[2]);
 			});
 		});
 
-		this.addCommand("tom1_amp", "f", { arg msg;
+		this.addCommand("ht_amp", "f", { arg msg;
 			if (lorenzosDrums.notNil,{
 				lorenzosDrums.setAmpTom1(msg[1]);
 			});
 		});
 
 
-		this.addCommand("tom2", "ffffffff", { arg msg;
+		this.addCommand("mt", "ffffffff", { arg msg;
 			if (lorenzosDrums.notNil,{
 				lorenzosDrums.playTom2(msg[1],msg[2],msg[3],msg[4],msg[5],msg[6],msg[7],msg[8]);
 			});
 		});
 
-		this.addCommand("tom2_mix", "ff", { arg msg;
+		this.addCommand("mt_mix", "ff", { arg msg;
 			if (lorenzosDrums.notNil,{
 				lorenzosDrums.setMixTom2(msg[1],msg[2]);
 			});
 		});
 
-		this.addCommand("tom2_amp", "f", { arg msg;
+		this.addCommand("mt_amp", "f", { arg msg;
 			if (lorenzosDrums.notNil,{
 				lorenzosDrums.setAmpTom2(msg[1]);
 			});
 		});
 
 
-		this.addCommand("tom3", "ffffffff", { arg msg;
+		this.addCommand("lt", "ffffffff", { arg msg;
 			if (lorenzosDrums.notNil,{
 				lorenzosDrums.playTom3(msg[1],msg[2],msg[3],msg[4],msg[5],msg[6],msg[7],msg[8]);
 			});
 		});
 
-		this.addCommand("tom3_mix", "ff", { arg msg;
+		this.addCommand("lt_mix", "ff", { arg msg;
 			if (lorenzosDrums.notNil,{
 				lorenzosDrums.setMixTom3(msg[1],msg[2]);
 			});
 		});
 
-		this.addCommand("tom3_amp", "f", { arg msg;
+		this.addCommand("lt_amp", "f", { arg msg;
 			if (lorenzosDrums.notNil,{
 				lorenzosDrums.setAmpTom3(msg[1]);
 			});

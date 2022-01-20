@@ -14,7 +14,7 @@ local message_text=""
 local message_count=0
 drm={}
 props={"velocity","accent +","accent -","pan right","pan left","rate up","rate down","reverse","skip %"}
-instruments={"bd","sd","cs","ch","oh","rc","tom1","tom2","tom3"}
+instruments={"bd","sd","cs","ch","oh","rc","ht","mt","lt"}
 
 function init()
   if not util.file_exists(_path.audio.."lorenzos-drums") then
@@ -104,17 +104,26 @@ function init()
   }
 
   params:add_group("mixer",#instruments)
-  for _, ins in ipairs(instruments) do
+  for _,ins in ipairs(instruments) do
     params:add{type="control",id=ins.."vol",name=ins,controlspec=controlspec.new(-96,36,'lin',0.1,0,'',0.1/(36+96)),formatter=function(v)
       local val=math.floor(util.linlin(0,1,v.controlspec.minval,v.controlspec.maxval,v.raw)*10)/10
       return ((val<0) and "" or "+")..val.." dB"
-    end
-  }
+    end}
     params:set_action(ins.."vol",function(x)
       engine[ins.."_amp"](util.dbamp(x))
     end)
   end
 
+  params:add_group("effects",4)
+  local defaults={18000,60}
+  for i,filt in ipairs({"lpf","hpf"}) do
+    params:add{type="control",id=filt,name=filt.." freq",controlspec=controlspec.new(10,18000,'exp',10,defaults[i],'Hz',10/18000),action=function(x)
+      engine.fx(filt,x)
+    end}
+    params:add{type="control",id=filt.."rq",name=filt.." rq",controlspec=controlspec.new(0.05,1,'lin',0.05,0.65,'',0.05/1),action=function(x)
+      engine.fx(filt.."rq",x)
+    end}
+  end
 
   local mics={
     bd=3,
@@ -123,28 +132,29 @@ function init()
     rc=3,
     oh=2,
     ch=2,
-    tom1=2,
-    tom2=2,
-    tom3=2,
+    ht=2,
+    mt=2,
+    lt=2,
   }
   local mic_names={"hat","snare","kick"}
-  for _, ins in ipairs(instruments) do 
+  for _,ins in ipairs(instruments) do
     local mic_num=mics[ins]
-    params:add_group(ins,mic_num+2)
+    params:add_group(ins,mic_num+4)
     for i=1,mic_num do
       params:add{type="control",id=ins.."mic"..i,name=mic_names[i].." mic",controlspec=controlspec.new(-96,36,'lin',0.1,-9,'',0.1/(36+96)),formatter=function(v)
-          local val=math.floor(util.linlin(0,1,v.controlspec.minval,v.controlspec.maxval,v.raw)*10)/10
-          return ((val<0) and "" or "+")..val.." dB"
-        end
-      }
+        local val=math.floor(util.linlin(0,1,v.controlspec.minval,v.controlspec.maxval,v.raw)*10)/10
+        return ((val<0) and "" or "+")..val.." dB"
+      end}
       params:set_action(ins.."mic"..i,function(x)
         if mic_num==2 then
           engine[ins.."_mix"](util.dbamp(params:get(ins.."mic1")),util.dbamp(params:get(ins.."mic2")))
         else
           engine[ins.."_mix"](util.dbamp(params:get(ins.."mic1")),util.dbamp(params:get(ins.."mic2")),util.dbamp(params:get(ins.."mic3")))
         end
-      end)    
+      end)
     end
+    params:add_control(ins.."pan","pan",controlspec.new(-1,1,"lin",0.01,0,"",0.01/2))
+    params:add_control(ins.."rate","rate",controlspec.new(-2,2,"lin",0.01,1,"x",0.01/2))
     params:add_control(ins.."reverbSend","reverb send",controlspec.new(0,100,"lin",1,0,"%",1/100))
     params:add_control(ins.."delaySend","delay send",controlspec.new(0,100,"lin",1,0,"%",1/100))
   end
@@ -165,7 +175,7 @@ function upload_beat(s)
   reset_instruments()
 
   local beat=collect_beat(s)
-  local ins_alias={bd=1,sd=2,cs=3,hh=4,ch=4,oh=5,rc=6,tom1=7,t1=7,tom2=8,t2=8,tom3=9,t3=9}
+  local ins_alias={bd=1,sd=2,cs=3,hh=4,ch=4,oh=5,rc=6,ht=7,t1=7,mt=8,t2=8,lt=9,t3=9}
 
   for _,v in ipairs(beat) do
     local i=ins_alias[v.name]
@@ -249,7 +259,7 @@ function enc(k,d)
     if shift then
       g_sel_ptn=util.clamp(g_sel_ptn+d,1,9)
     else
-      g_sel_drm=util.clamp(g_sel_drm+d,1,8)
+      g_sel_drm=util.clamp(g_sel_drm+d,1,9)
     end
   end
   if show_grid>0 then
@@ -364,9 +374,11 @@ function draw_drums()
 
   for i,d in ipairs(drm) do
     if d.show and math.random()<0.5 then
-      for j,s in ipairs(sticks[i]) do
-        if s~=nil then
-          sticking[j]=s
+      if sticks[i]~=nil then
+        for j,s in ipairs(sticks[i]) do
+          if s~=nil then
+            sticking[j]=s
+          end
         end
       end
     end
