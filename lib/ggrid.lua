@@ -242,8 +242,11 @@ function GGrid:get_visual()
 end
 
 function GGrid:grid_redraw()
-  self.g:all(0)
   local gd=self:get_visual()
+  if self.g.rows==0 then
+    do return end
+  end
+  self.g:all(0)
   local s=1
   local e=self.grid_width
   local adj=0

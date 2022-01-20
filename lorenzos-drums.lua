@@ -367,7 +367,8 @@ function draw_drums()
     screen.stroke()
   end
 
-  for i,d in ipairs(drm) do
+  for i=#drm,1,-1 do
+    local d=drm[i]
     local v=d.name..(d.show and "2" or "1")
     if d.name=="oh" and not d.playing then
     else
