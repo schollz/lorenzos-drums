@@ -52,15 +52,16 @@ function init()
 
   -- setup the redrawing
   show_grid=0
-  clock.run(function()
-    while true do
-      clock.sleep(1/10)
-      redraw()
-      if show_grid>0 then
-        show_grid=show_grid-1
-      end
+  local counter=metro.init()
+  counter.time=1/10
+  counter.count=-1
+  counter.event=function()
+    redraw()
+    if show_grid>0 then
+      show_grid=show_grid-1
     end
-  end)
+  end
+  counter:start()
 
   -- setup saving and loading
   params.action_write=function(filename,name)
@@ -271,7 +272,7 @@ function redraw()
   end
   screen.level(15)
   screen.move(120,7)
-  screen.text_right(instruments[g_sel_drm].." / "..props[g_sel_ptn])
+  screen.text_right(instruments[g_sel_drm].." / "..props[g_sel_ptn].."  "..(lattice.enabled and ">" or "||"))
 
   if message_count>0 then
     message_count=message_count-1
