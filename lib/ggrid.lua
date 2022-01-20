@@ -37,6 +37,7 @@ function GGrid:new(args)
 
   -- keep track of pressed buttons
   m.pressed_buttons={}
+  m.gesture_mode={true,true}
 
   -- grid refreshing
   m.grid_refresh=metro.init()
@@ -94,21 +95,27 @@ function GGrid:key_press(row,col,on)
       return
     end
   end
-  if row==8 and col<=8 then
+  if row==8 and col<=9 then
     self:set_drm(col)
   elseif row<7 then
     self:adj_ptn(row,col)
-  elseif row==8 and col<=11 then -- TODO allow prob/reverse
+  elseif row==8 and col<15 then -- TODO allow prob/reverse
     self:change_ptn(col)
-  elseif row==8 and col==15 then
+  elseif row==8 and col>=15 then
     self:change_mode(col)
   end
 end
 
 function GGrid:change_mode(col)
-  self.mode=self.mode+1
-  if self.mode>3 then
-    self.mode=1
+  self.gesture_mode[col-14]=not self.gesture_mode[col-14]
+  if self.gesture_mode[1] and self.gesture_mode[2] then
+    self.mode=MODE_INCREASE
+  elseif self.gesture_mode[1] and not self.gesture_mode[2] then
+    self.mode=MODE_DECREASE
+  elseif not self.gesture_mode[1] and not self.gesture_mode[2] then
+    self.mode=MODE_ERASE
+  else
+    self.mode=MODE_LENGTH
   end
 end
 
@@ -203,21 +210,14 @@ function GGrid:get_visual()
 
   -- show pattern selectors
   if g_sel_ptn==1 then
-    self.visual[8][9]=10
+    self.visual[8][10]=10
   else
-    self.visual[8][math.floor(g_sel_ptn/2)+9]=g_sel_ptn%2==0 and 10 or 5
+    self.visual[8][math.floor(g_sel_ptn/2)+10]=g_sel_ptn%2==0 and 10 or 5
   end
 
   -- show mode
-  if self.mode==MODE_LENGTH then
-    self.visual[8][16]=10
-  elseif self.mode==MODE_ERASE then
-    self.visual[8][15]=0
-  elseif self.mode==MODE_INCREASE then
-    self.visual[8][15]=10
-  elseif self.mode==MODE_DECREASE then
-    self.visual[8][15]=3
-  end
+  self.visual[8][15]=self.gesture_mode[1] and 10 or 3
+  self.visual[8][16]=self.gesture_mode[2] and 10 or 3
 
   -- show pattern
   local i=0
