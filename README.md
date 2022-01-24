@@ -5,8 +5,7 @@ an electroacoustic drumset.
 ![image](/img/150214610-62e945ed-bae6-44cf-b62a-e2ec63daad93.png)
 
 
-this is a norns script that allows you to manipulate a high-quality drumset composed of many meticulously captured samples from [Lorenzo Wood](https://www.lorenzowoodmusic.com/)  (shared through [www.pianobook.co.uk](https://www.pianobook.co.uk/packs/lorenzos-drums-v1/)).
-
+this is a norns script that allows you to manipulate a high-quality drumset composed of many meticulously captured samples from [Lorenzo Wood](https://www.lorenzowoodmusic.com/)  (shared through [www.pianobook.co.uk](https://www.pianobook.co.uk/packs/lorenzos-drums-v1/)). each drum hit is composed of ~6 samples which are mixed according to the current mic positions (up to three positions) and velocity (interpoalted between two velocities of up to eight layers).
 
 
 ## Requirements
@@ -19,7 +18,7 @@ this is a norns script that allows you to manipulate a high-quality drumset comp
 
 **quickstart**
 
-press K1+K3
+the first time you start you will have to wait for samples to download. once done you can run by pressing **K1+K3**.
 
 **guide**
 
@@ -33,6 +32,9 @@ press K1+K3
 ![image1](/img/150213784-14164b1e-f48f-47fe-903a-351484ec0def.png)
 
 ![image2](/img/150213789-cdaaab9c-9084-4c5d-857c-cb95744d9048.png)
+
+at the heart of lorenzo's drums are nine drum pieces (kick, snare, crossstick, closed hat, open hat, ride, low tom, mid tom, and high tom). each drum set piece has parameters that can be modulated by individual step sequences - including velocity, pan, rate, reverse, probability. each of these parameters are modulated by increasing the value of a step in its step sequencer. 
+
 
 **grid**
 

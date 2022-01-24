@@ -8,6 +8,27 @@ drum_patterns["weird fishes"]=[[
   ch x-x-x-xxx-
 ]]
 
+drum_patterns["funky drummer"]=[[
+  bd x-x---x---x--x--
+  sd ----x--x-x-xx--x
+  ch xxxxxxx-xxxxx-xx
+  oh -------x-----x--
+]]
+
+drum_patterns["walk this way"]=[[
+  bd x------xx-x-----
+  sd ----x-------x---
+  ch --x-x-x-x-x-x-x-
+  oh x---------------
+]]
+
+drum_patterns["jungle"]=[[
+  bd x-x-------x------xx-------x-----
+  sd ----x--x-x----x--x--x--x-x----x-
+  ch x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-
+  oh x-------------------------------
+]]
+
 drum_patterns["amen brother"]=[[
   bd x-x-------xx----
   sd ----x--x-x--x--x
