@@ -96,13 +96,17 @@ function Instrument:emit()
     p:iterate()
   end
   local skip=math.random()<self.ptn[9]:val()
-  if self.ptn[1]:raw_val()==0 or self.muted or skip then
-    do
-      return
+  local dontskip=math.random(1,3)*(math.random()<0.1 and 1 or 0)
+  if dontskip==0 then
+    if self.ptn[1]:raw_val()==0 or self.muted or skip then
+      do
+        return
+      end
     end
   end
 
   local velocity=self.ptn[1]:val()+self.ptn[2]:val()+self.ptn[3]:val()
+  velocity=velocity>0 and velocity or dontskip
   local velocity_min_max={util.clamp(velocity-7,0,127),util.clamp(velocity+7,0,127)}
   velocity=math.random()*(velocity_min_max[2]-velocity_min_max[1])+velocity_min_max[1]
   local amp=1 -- to be set in parameters
