@@ -16,7 +16,6 @@ drm={}
 props={"velocity","accent +","accent -","pan right","pan left","rate up","rate down","reverse","skip %"}
 instruments={"bd","sd","cs","ch","oh","rc","ht","mt","lt"}
 disable_transport=false
-do_recording=false
 
 function init()
   if not util.file_exists(_path.audio.."lorenzos-drums") then
@@ -43,11 +42,14 @@ function init()
   -- initialize lattice
   lattice=lattice_:new()
   lattice_pattern={}
+  lattice_last_beat=clock.get_beats()
   for i,instrument in ipairs(drm) do
     lattice_pattern[i]=lattice:new_pattern{
       action=function()
         instrument_action(i)
-        print(clock.get_beats())
+        if i==1 then
+          lattice_last_beat=clock.get_beats()
+        end
       end,
       division=1/16
     }
@@ -105,11 +107,7 @@ function init()
       upload_beat(drum_patterns[drum_pattern_options[params:get("choose pattern")]])
     end
   }
-  params:add{type="binary",name="record",id="record",behavior="toggle",
-    action=function(v)
-      do_recording=true
-    end
-  }
+  params:add{type="binary",name="record",id="record",behavior="toggle"}
 
   -- TODO: add midi in/out
   -- setup midi
@@ -155,7 +153,7 @@ function init()
   }
   for i,track in ipairs(instruments) do
     local note_param_id=track.."_midi_note"
-    params:add_number(note_param_id,track..": midi note",0,127,DEFAULT_NOTES[track])
+    params:add_number(note_param_id,track..": midi note",0,127,DEFAULT_NOTES[i])
     local chan_param_id=track.."_midi_chan"
     params:add_number(chan_param_id,track..": midi chan",1,16,1)
   end
@@ -213,6 +211,7 @@ function init()
     params:add_control(ins.."pan","pan",controlspec.new(-1,1,"lin",0.01,0,"",0.01/2))
     params:add_control(ins.."rate","rate",controlspec.new(-2,2,"lin",0.01,1,"x",0.01/2))
     params:add_control(ins.."reverbSend","reverb send",controlspec.new(0,100,"lin",1,0,"%",1/100))
+    params:add_control(ins.."delaySend","delay send",controlspec.new(0,100,"lin",1,0,"%",1/100))
     params:add{type="binary",name="trigger",id=ins.."trigger",behavior="trigger",
       action=function(v)
         trigger_ins(ins_i)
@@ -223,8 +222,19 @@ function init()
 end
 
 function trigger_ins(i)
-  if do_recording then
-    -- add the instrument
+  if params:get("record")==1 then
+    local ix=drm[i].ptn[1].seq.ix
+    local pos_current=drm[i].ptn[1].seq.data[ix]
+    local pos_next=pos_current+1
+    if ix==drm[i].ptn[1].seq.length then
+      pos_next=drm[i].ptn[1].seq.data[1]
+    end
+    local pos=pos_current
+    if clock.get_beats()-lattice_last_beat>clock.get_beat_sec()/4/2 then
+      -- use next beat
+      pos=pos_next
+    end
+    drm[i].ptn[1].data[pos]=math.random(1,3)
   end
   engine[instruments[i]](math.random(30,60),0.5,0,1,18000,0,0,0)
 end
@@ -352,21 +362,21 @@ function key(k,z)
   end
 end
 
-function clock.transport.start()
-  if disable_transport then
-    do return end
-  end
-  print("transport start")
-  toggle_playing(true)
-end
+-- function clock.transport.start()
+--   if disable_transport then
+--     do return end
+--   end
+--   print("transport start")
+--   toggle_playing(true)
+-- end
 
-function clock.transport.stop()
-  if disable_transport then
-    do return end
-  end
-  print("transport stop")
-  toggle_playing(false)
-end
+-- function clock.transport.stop()
+--   if disable_transport then
+--     do return end
+--   end
+--   print("transport stop")
+--   toggle_playing(false)
+-- end
 
 function toggle_playing(on)
   disable_transport=true

@@ -107,6 +107,7 @@ function GGrid:key_press(row,col,on)
 end
 
 function GGrid:change_mode(col)
+  params:set("record",0)
   self.gesture_mode[col-14]=not self.gesture_mode[col-14]
   if self.gesture_mode[1]==true and self.gesture_mode[2]==true then
     self.mode=MODE_INCREASE
@@ -114,6 +115,7 @@ function GGrid:change_mode(col)
     self.mode=MODE_DECREASE
   elseif self.gesture_mode[1]==false and self.gesture_mode[2]==false then
     self.mode=MODE_ERASE
+    params:set("record",1)
   else
     self.mode=MODE_LENGTH
   end
@@ -175,11 +177,14 @@ function GGrid:adj_ptn(row,col)
 end
 
 function GGrid:set_drm(i)
-  if i==g_sel_drm then
-    -- toggle mute
-    drm[i].muted=not drm[i].muted
+  if self.mode==MODE_INCREASE or self.mode==MODE_DECREASE then
+    if i==g_sel_drm then
+      -- toggle mute
+      drm[i].muted=not drm[i].muted
+    end
   end
   g_sel_drm=i
+  trigger_ins(i)
 end
 
 function GGrid:get_visual()

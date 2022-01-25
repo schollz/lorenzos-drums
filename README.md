@@ -40,6 +40,15 @@ at the heart of lorenzo's drums are nine drum pieces (kick, snare, crossstick, c
 
 the grid works too. for example... (TODO) **🦗🦗🦗🦗** 
 
+**midi**
+
+midi output and input is supported. midi output is sent per channel, each instrument on its own channel (1-9). midi input by default is note based but can be changed in the settings. instrument triggers can also be midimapped so you can use a midi controller instead of a keyboard.
+
+**recording**
+
+you can record quantized notes onto any track. enter recording mode by toggling `PARAMS > record`, or by going into "ERASE/REC" mode on the grid by making the last two buttons dim.
+
+
 
 ## todo
 
