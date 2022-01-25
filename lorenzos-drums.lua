@@ -15,6 +15,7 @@ local message_count=0
 drm={}
 props={"velocity","accent +","accent -","pan right","pan left","rate up","rate down","reverse","skip %"}
 instruments={"bd","sd","cs","ch","oh","rc","ht","mt","lt"}
+disable_transport=false
 
 function init()
   if not util.file_exists(_path.audio.."lorenzos-drums") then
@@ -145,7 +146,7 @@ function init()
     48,-- mid tom
     45,-- low tom
   }
-  for i,track in ipairs(instruments)
+  for i,track in ipairs(instruments) do
     local note_param_id=track.."_midi_note"
     params:add_number(note_param_id,track..": midi note",0,127,DEFAULT_NOTES[track])
     local chan_param_id=track.."_midi_chan"
@@ -333,16 +334,23 @@ function key(k,z)
 end
 
 function clock.transport.start()
+  if disable_transport then
+    do return end
+  end
   print("transport start")
   toggle_playing(true)
 end
 
 function clock.transport.stop()
+  if disable_transport then
+    do return end
+  end
   print("transport stop")
   toggle_playing(false)
 end
 
 function toggle_playing(on)
+  disable_transport=true
   if on~=nil then
     if on then
       lattice:hard_restart()
@@ -359,6 +367,7 @@ function toggle_playing(on)
   else
     lattice:hard_restart()
   end
+  disable_transport=false
 end
 
 local sticks={}
