@@ -16,6 +16,7 @@ drm={}
 props={"velocity","accent +","accent -","pan right","pan left","rate up","rate down","reverse","skip %"}
 instruments={"bd","sd","cs","ch","oh","rc","ht","mt","lt"}
 disable_transport=false
+do_recording=false
 
 function init()
   if not util.file_exists(_path.audio.."lorenzos-drums") then
@@ -46,6 +47,7 @@ function init()
     lattice_pattern[i]=lattice:new_pattern{
       action=function()
         instrument_action(i)
+        print(clock.get_beats())
       end,
       division=1/16
     }
@@ -101,6 +103,11 @@ function init()
     action=function(v)
       print("uploading beat!")
       upload_beat(drum_patterns[drum_pattern_options[params:get("choose pattern")]])
+    end
+  }
+  params:add{type="binary",name="record",id="record",behavior="toggle",
+    action=function(v)
+      do_recording=true
     end
   }
 
@@ -187,9 +194,9 @@ function init()
     lt=2,
   }
   local mic_names={"hat","snare","kick"}
-  for _,ins in ipairs(instruments) do
+  for ins_i,ins in ipairs(instruments) do
     local mic_num=mics[ins]
-    params:add_group(ins,mic_num+4)
+    params:add_group(ins,mic_num+5)
     for i=1,mic_num do
       params:add{type="control",id=ins.."mic"..i,name=mic_names[i].." mic",controlspec=controlspec.new(-96,36,'lin',0.1,-9,'',0.1/(36+96)),formatter=function(v)
         local val=math.floor(util.linlin(0,1,v.controlspec.minval,v.controlspec.maxval,v.raw)*10)/10
@@ -206,8 +213,20 @@ function init()
     params:add_control(ins.."pan","pan",controlspec.new(-1,1,"lin",0.01,0,"",0.01/2))
     params:add_control(ins.."rate","rate",controlspec.new(-2,2,"lin",0.01,1,"x",0.01/2))
     params:add_control(ins.."reverbSend","reverb send",controlspec.new(0,100,"lin",1,0,"%",1/100))
-    params:add_control(ins.."delaySend","delay send",controlspec.new(0,100,"lin",1,0,"%",1/100))
+    params:add{type="binary",name="trigger",id=ins.."trigger",behavior="trigger",
+      action=function(v)
+        trigger_ins(ins_i)
+      end
+    }
+
   end
+end
+
+function trigger_ins(i)
+  if do_recording then
+    -- add the instrument
+  end
+  engine[instruments[i]](math.random(30,60),0.5,0,1,18000,0,0,0)
 end
 
 function reset_instruments()
