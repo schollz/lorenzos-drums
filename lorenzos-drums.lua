@@ -357,6 +357,7 @@ function toggle_playing(on)
     else
       lattice:stop()
     end
+    disable_transport=false
     do return end
   end
   if lattice.enabled then
