@@ -90,7 +90,7 @@ function Instrument:reset()
   end
 end
 
-function Instrument:emit()
+function Instrument:emit(velocity)
   self.playing=false
   for _,p in ipairs(self.ptn) do
     p:iterate()
@@ -126,6 +126,10 @@ function Instrument:emit()
   self.show=true
   --print(self.name,velocity,amp,pan,rate,lpf,sendReverb,sendDelay,startPos)
   engine[self.name](velocity,amp,pan,rate,lpf,sendReverb,sendDelay,startPos)
+  if params:get("midi_out")>1 then
+    local m=midi_devices[midi_device_list[params:get("midi_out")]]
+    m:note_on(params:get(self.name.."_midi_note"),velocity,params:get(self.name.."_midi_chan"))
+  end
 end
 
 return Instrument

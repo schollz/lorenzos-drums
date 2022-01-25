@@ -103,6 +103,55 @@ function init()
     end
   }
 
+  -- TODO: add midi in/out
+  -- setup midi
+  midi_devices={}
+  midi_device_list={"none"}
+  for _,dev in pairs(midi.devices) do
+    table.insert(midi_device_list,dev.name)
+    midi_devices[dev.name]=midi.connect(dev.port)
+    midi_devices[dev.name].event=function(data)
+      if dev.name~=midi_device_list[params:get("midi_in")] then
+        do return end
+      end
+      local msg=midi.to_msg(data)
+      if msg.type=="clock" then
+        do return end
+      end
+      if msg.type=="continue" then
+        toggle_playing(true)
+      elseif msg.type=="stop" then
+        toggle_playing(false)
+      end
+      if msg.type=="note_on" then
+        if msg.ch<=9 and instruments[msg.ch]~=nil then
+          engine[instruments[msg.ch]](msg.vel,0.5,0,1,18000,0,0,0)
+        end
+      end
+    end
+  end
+  params:add_group("midi",2+(9*2))
+  params:add_option("midi_in","midi in",midi_device_list,1)
+  params:add_option("midi_out","midi out",midi_device_list,1)
+  local DEFAULT_NOTES={
+    -- General MIDI standard
+    36,-- Kick
+    38,-- Snare
+    37,-- Rim
+    42,-- Closed hi-hat
+    46,-- Open hi-hat
+    51,-- ride
+    50,-- hi tom
+    48,-- mid tom
+    45,-- low tom
+  }
+  for i,track in ipairs(instruments)
+    local note_param_id=track.."_midi_note"
+    params:add_number(note_param_id,track..": midi note",0,127,DEFAULT_NOTES[track])
+    local chan_param_id=track.."_midi_chan"
+    params:add_number(chan_param_id,track..": midi chan",1,16,1)
+  end
+
   params:add_group("mixer",#instruments)
   for _,ins in ipairs(instruments) do
     params:add{type="control",id=ins.."vol",name=ins,controlspec=controlspec.new(-96,36,'lin',0.1,0,'',0.1/(36+96)),formatter=function(v)
@@ -283,7 +332,25 @@ function key(k,z)
   end
 end
 
-function toggle_playing()
+function clock.transport.start()
+  print("transport start")
+  toggle_playing(true)
+end
+
+function clock.transport.stop()
+  print("transport stop")
+  toggle_playing(false)
+end
+
+function toggle_playing(on)
+  if on~=nil then
+    if on then
+      lattice:hard_restart()
+    else
+      lattice:stop()
+    end
+    do return end
+  end
   if lattice.enabled then
     lattice:stop()
     for _,d in ipairs(drm) do
