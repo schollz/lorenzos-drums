@@ -64,3 +64,4 @@ install using with
 ;install https://github.com/schollz/lorenzos-samples
 ```
 
+once you run for the first time it will automatically download the samples (requires 200 MB of disk space).
