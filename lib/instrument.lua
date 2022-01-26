@@ -96,7 +96,7 @@ function Instrument:emit(velocity)
     p:iterate()
   end
   local skip=math.random()<self.ptn[9]:val()
-  local dontskip=math.random(1,3)*(math.random()<0.1 and 1 or 0)
+  local dontskip=math.random(1,3)*(math.random()<0.0 and 1 or 0)
   if dontskip==0 then
     if self.ptn[1]:raw_val()==0 or self.muted or skip then
       do

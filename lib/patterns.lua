@@ -8,6 +8,88 @@ drum_patterns["weird fishes"]=[[
   ch x-x-x-xxx-
 ]]
 
+-- bd x--x--x--x----x-
+-- sd ----x-----x-----
+-- ch -x-x-x-xxx-xxx-x
+-- oh ----------------
+
+-- bd x--x-x--x-xx----
+-- sd ----x----x--x--x
+-- ch -xxx-xxx-x-x-xxx
+-- oh ----------------
+
+-- bd x--x-------x--x-
+-- sd ----x-------x---
+-- ch -xxx-xxxxxx-xxxx
+-- oh ----------------
+
+-- bd x--x-----x-x--x-
+-- sd ----x--xx----x--
+-- ch -xxx-xxxx-x-xxxx
+-- oh ---------x-x----
+
+-- bd x--x--x--x---x--
+-- sd ----x-----x-----
+-- ch -xx--x-xxxxxx-xx
+-- oh ---------------- 
+
+-- bd x--x----x-xx-x--
+-- sd ----x--x-x--x---
+-- ch -xx--x-xxxxxxx-- 
+-- oh --------------x-  
+
+-- bd x--x----x-x---x-
+-- sd ----x--x-x--x---
+-- ch -xx--x-xxxxxxx-- 
+-- oh ---------------- 
+
+-- bd x--x----x-xx-xx-
+-- sd ----x--x-x--x--x
+-- ch -xx--x-xxxxxxxxx
+-- oh ---------------- 
+
+-- bd x-x--x----x---x-
+-- sd ------x-----x--x
+-- ch -x--x-xxxx-xxx--
+-- oh ---------------- 
+
+-- bd x--x-x-xx-xx-x--
+-- sd ----x----x--x---
+-- ch -x--x-xxxx-xxx--
+-- oh --------------x- 
+
+drum_patterns["brand e"]=[[
+  bd x--x--x--x----x-
+  sd ----x-----x-----
+  ch -x-x-x-xxx-xxx-x
+  oh ----------------
+  
+  bd x--x-x--x-xx----
+  sd ----x----x--x--x
+  ch -xxx-xxx-x-x-xxx
+  oh ----------------
+  
+  bd x--x-------x--x-
+  sd ----x-------x---
+  ch -xxx-xxxxxx-xxxx
+  oh ----------------
+  
+  bd x--x-----x-x--x-
+  sd ----x--xx----x--
+  ch -xxx-xxxx-x-xxxx
+  oh ---------x-x----
+
+  bd x-x--x----x---x-
+  sd ------x-----x--x
+  ch -x--x-xxxx-xxx--
+  oh ---------------- 
+
+  bd x--x-x-xx-xx-x--
+  sd ----x----x--x---
+  ch -x--x-xxxx-xxx--
+  oh --------------x- 
+]]
+
 drum_patterns["funky drummer"]=[[
   bd x-x---x---x--x--
   sd ----x--x-x-xx--x
