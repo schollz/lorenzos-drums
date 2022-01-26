@@ -1,4 +1,19 @@
--- lorenzo's drums
+-- lorenzo's drums v0.1.0
+-- an electroacoustic drumset.
+--
+-- llllllll.co/t/lorenzos-drums
+--
+--
+--
+--    ▼ instructions below ▼
+--
+-- E1 selects drum
+-- K1+E1 selects parameter
+-- E2/E3 changes position
+-- K2/K3 decreases/increases
+-- K1+K2 sets sequence length
+-- K1+K3 toggles playing
+
 if not string.find(package.cpath,"/home/we/dust/code/lorenzos-drums/lib/") then
   package.cpath=package.cpath..";/home/we/dust/code/lorenzos-drums/lib/?.so"
 end
@@ -362,31 +377,34 @@ function key(k,z)
   end
 end
 
--- function clock.transport.start()
---   if disable_transport then
---     do return end
---   end
---   print("transport start")
---   toggle_playing(true)
--- end
+function clock.transport.start()
+  if disable_transport then
+    do return end
+  end
+  print("transport start")
+  toggle_playing(true)
+end
 
--- function clock.transport.stop()
---   if disable_transport then
---     do return end
---   end
---   print("transport stop")
---   toggle_playing(false)
--- end
+function clock.transport.stop()
+  if disable_transport then
+    do return end
+  end
+  print("transport stop")
+  toggle_playing(false)
+end
 
 function toggle_playing(on)
   disable_transport=true
+  clock.run(function()
+    clock.sleep(1)
+    disable_transport=false
+  end)
   if on~=nil then
     if on then
       lattice:hard_restart()
     else
       lattice:stop()
     end
-    disable_transport=false
     do return end
   end
   if lattice.enabled then
@@ -397,7 +415,6 @@ function toggle_playing(on)
   else
     lattice:hard_restart()
   end
-  disable_transport=false
 end
 
 local sticks={}

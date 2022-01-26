@@ -26,8 +26,8 @@ the first time you start you will have to wait for samples to download. once don
 - K1+E1 selects parameter
 - E2/E3 changes position in grid
 - K2/K3 decreases/increases value
-- K1+K3 plays
-- K1+K2 sets length of  grid
+- K1+K2 sets length of sequence
+- K1+K3 toggles playing
 
 ![image1](/img/150213784-14164b1e-f48f-47fe-903a-351484ec0def.png)
 
