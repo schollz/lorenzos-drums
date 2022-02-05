@@ -32,6 +32,8 @@ props={"velocity","accent +","accent -","pan right","pan left","rate up","rate d
 instruments={"bd","sd","cs","ch","oh","rc","ht","mt","lt"}
 disable_transport=false
 debounce_record={false,false,false,false,false,false,false,false,false}
+division_options_={"1/32","1/24","1/16","1/12","1/10","1/8","1/6","1/4","1/3","1/2","1","3/2","2"}
+division_options={1/32,1/24,1/16,1/12,1/10,1/8,1/6,1/4,1/3,1/2,1,3/2,2}
 
 function init()
   if not util.file_exists(_path.audio.."lorenzos-drums") then
@@ -67,7 +69,7 @@ function init()
           lattice_last_beat=clock.get_beats()
         end
       end,
-      division=1/16
+      division=1/16,
     }
   end
 
@@ -210,7 +212,7 @@ function init()
   local mic_names={"hat","snare","kick"}
   for ins_i,ins in ipairs(instruments) do
     local mic_num=mics[ins]
-    params:add_group(ins,mic_num+5)
+    params:add_group(ins,mic_num+7)
     for i=1,mic_num do
       params:add{type="control",id=ins.."mic"..i,name=mic_names[i].." mic",controlspec=controlspec.new(-96,36,'lin',0.1,-9,'',0.1/(36+96)),formatter=function(v)
         local val=math.floor(util.linlin(0,1,v.controlspec.minval,v.controlspec.maxval,v.raw)*10)/10
@@ -233,7 +235,14 @@ function init()
         trigger_ins(ins_i)
       end
     }
-
+    params:add_option(ins.."division","clock division",division_options_)
+    params:set_action(ins.."division",function(x)
+      drm[ins_i].division=division_options[x]
+    end)
+    params:add_control(ins.."swing","swing",controlspec.new(0,100,"lin",1,50,"%",1/100))
+    params:set_action(ins.."swing",function(x)
+      drm[ins_i].swing=math.floor(x)
+    end)
   end
 end
 
@@ -247,7 +256,7 @@ function trigger_ins(i)
       pos_next=drm[i].ptn[1].seq.data[1]
     end
     local pos=pos_current
-    if clock.get_beats()-lattice_last_beat>clock.get_beat_sec()/4/2 then
+    if clock.get_beats()-lattice_last_beat>clock.get_beat_sec()*drm[i].division*2 then
       -- use next beat
       pos=pos_next
     end
