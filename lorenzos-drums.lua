@@ -213,6 +213,14 @@ function init()
   for ins_i,ins in ipairs(instruments) do
     local mic_num=mics[ins]
     params:add_group(ins,mic_num+7)
+    params:add_option(ins.."division","clock division",division_options_,3)
+    params:set_action(ins.."division",function(x)
+      drm[ins_i].division=division_options[x]
+    end)
+    params:add_control(ins.."swing","swing",controlspec.new(0,100,"lin",1,50,"%",1/100))
+    params:set_action(ins.."swing",function(x)
+      drm[ins_i].swing=math.floor(x)
+    end)
     for i=1,mic_num do
       params:add{type="control",id=ins.."mic"..i,name=mic_names[i].." mic",controlspec=controlspec.new(-96,36,'lin',0.1,-9,'',0.1/(36+96)),formatter=function(v)
         local val=math.floor(util.linlin(0,1,v.controlspec.minval,v.controlspec.maxval,v.raw)*10)/10
@@ -235,14 +243,6 @@ function init()
         trigger_ins(ins_i)
       end
     }
-    params:add_option(ins.."division","clock division",division_options_)
-    params:set_action(ins.."division",function(x)
-      drm[ins_i].division=division_options[x]
-    end)
-    params:add_control(ins.."swing","swing",controlspec.new(0,100,"lin",1,50,"%",1/100))
-    params:set_action(ins.."swing",function(x)
-      drm[ins_i].swing=math.floor(x)
-    end)
   end
 end
 
