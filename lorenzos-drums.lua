@@ -359,10 +359,10 @@ function osc.event(path,args,from)
   if path=="done" then
     msg("samples loaded.",10)
     upload_beat(drum_patterns["a blank"])
-    -- toggle_playing()
     for i=1,9 do
       drm[i]:bank_save(1)
     end
+    toggle_playing()
   elseif path=="load" then
     loaded_num=loaded_num+1
     msg("loaded "..math.floor(loaded_num/265*100).."% samples...")
