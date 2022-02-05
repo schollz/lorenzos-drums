@@ -33,7 +33,7 @@ the first time you start you will have to wait for samples to download. once don
 
 ![image2](/img/150213789-cdaaab9c-9084-4c5d-857c-cb95744d9048.png)
 
-at the heart of lorenzo's drums are nine drum pieces (kick, snare, crossstick, closed hat, open hat, ride, low tom, mid tom, and high tom). each drum set piece has parameters that can be modulated by individual step sequences - including velocity, pan, rate, reverse, probability. each of these parameters are modulated by increasing the value of a step in its step sequencer. 
+at the heart of lorenzo's drums are nine drum pieces (kick, snare, crossstick, closed hat, open hat, ride, low tom, mid tom, and high tom). each drum set piece has parameters that can be modulated by individual step sequences - including velocity, pan, rate, reverse, probability. each of these parameters are modulated by increasing the value of a step in its step sequencer. each parameter has its own sequener. each instrument has its own clock division and its own swing.
 
 
 **grid**
@@ -52,9 +52,7 @@ you can record quantized notes onto any track. enter recording mode by toggling 
 
 ## todo
 
-- testing loading/saving of banks
-- add mic placement parameters
-- add send parameters
+- test division/swing
 
 ## Install
 

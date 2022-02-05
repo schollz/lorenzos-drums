@@ -177,11 +177,10 @@ function GGrid:adj_ptn(row,col)
 end
 
 function GGrid:set_drm(i)
-  if self.mode==MODE_INCREASE or self.mode==MODE_DECREASE then
-    if i==g_sel_drm and lattice.enabled then
-      -- toggle mute
-      drm[i].muted=not drm[i].muted
-    end
+  if (self.mode==MODE_INCREASE or self.mode==MODE_DECREASE) and
+    i==g_sel_drm and lattice.enabled then
+    -- toggle mute
+    drm[i].muted=not drm[i].muted
   end
   trigger_ins(i)
   g_sel_drm=i
