@@ -13,8 +13,10 @@ function Instrument:new(o)
   o.swing=o.swing or 50
   o.division=o.division or 1/16
 
-  o.default_mappings={{0,30,90},-- velocity main
-    {0,30,60},-- velocity add
+  local main_mapping={20,80}
+  main_mapping=o.id==2 and {1,90} or main_mapping
+  o.default_mappings={{0,main_mapping[1],main_mapping[2]},-- velocity main
+    {0,0,60},-- velocity add
     {0,0,-60},-- velocity sub
     {0,0,1},-- pan add
     {0,0,-1},-- pan sub
@@ -24,8 +26,9 @@ function Instrument:new(o)
     {0,0,1} -- skip probability
   }
   o.ptn={}
-  for _,m in ipairs(o.default_mappings) do
+  for i,m in ipairs(o.default_mappings) do
     table.insert(o.ptn,slist:new({
+      finish=16,
       default=m[1],
       mapping={m[2],m[3]},
     binary=m[4]==nil and false or m[4]}))

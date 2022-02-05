@@ -233,7 +233,7 @@ function GGrid:get_visual()
     for col=1,16 do
       i=i+1
       self.visual[row][col]=((i>=d.start and i<=d.finish) and 1 or 0)+d.data[i]
-      if d.cur==i then
+      if d.cur==i and lattice.enabled then
         self.visual[row][col]=self.visual[row][col]+1
       end
     end

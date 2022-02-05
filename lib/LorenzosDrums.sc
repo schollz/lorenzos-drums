@@ -373,7 +373,7 @@ LorenzosDrums {
 		// stop all
 		synKick.do({ arg syn,i;
 			if (syn.isRunning,{
-				syn.set(\fade_trig,1);
+				syn.set(\fade_trig,1,\fade_time,0.4);
 			});
 		});
 		synKick=Array.new(namesMicKick.size*2);
@@ -428,7 +428,7 @@ LorenzosDrums {
 		// stop all
 		synSnare.do({ arg syn,i;
 			if (syn.isRunning,{
-				syn.set(\fade_trig,1,\rate,-1);
+				syn.set(\fade_trig,1,\fade_time,0.5);
 			});
 		});
 		synSnare=Array.new(namesMicSnare.size*2);

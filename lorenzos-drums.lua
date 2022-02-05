@@ -251,9 +251,13 @@ function trigger_ins(i)
       -- use next beat
       pos=pos_next
     end
-    drm[i].ptn[1].data[pos]=drm[i].ptn[1].data[pos]+math.random(1,2)
+    if drm[i].ptn[1].data[pos]==0 then
+      drm[i].ptn[1].data[pos]=math.random(4,7)
+    else
+      drm[i].ptn[1].data[pos]=util.clamp(drm[i].ptn[1].data[pos]+math.random(1,2),0,15)
+    end
   end
-  local velocity=math.random(65,75)
+  local velocity=math.random(30,60)
   local pan=0
   local rate=0
   local lpf=18000
@@ -290,7 +294,7 @@ function upload_beat(s)
       drm[i].ptn[1]:update()
       local row=1
       for _,pos in ipairs(v.pos) do
-        drm[i].ptn[1].data[pos]=math.random(1,i==2 and 2 or 4)
+        drm[i].ptn[1].data[pos]=7
       end
     end
   end
