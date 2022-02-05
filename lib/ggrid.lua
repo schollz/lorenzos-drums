@@ -178,13 +178,13 @@ end
 
 function GGrid:set_drm(i)
   if self.mode==MODE_INCREASE or self.mode==MODE_DECREASE then
-    if i==g_sel_drm then
+    if i==g_sel_drm and lattice.enabled then
       -- toggle mute
       drm[i].muted=not drm[i].muted
     end
   end
-  g_sel_drm=i
   trigger_ins(i)
+  g_sel_drm=i
 end
 
 function GGrid:get_visual()

@@ -90,13 +90,16 @@ function Instrument:reset()
   end
 end
 
-function Instrument:emit(velocity)
+function Instrument:emit(velocity,pan,rate,lpf)
   self.playing=false
-  for _,p in ipairs(self.ptn) do
-    p:iterate()
+  if velocity==nil then
+    for _,p in ipairs(self.ptn) do
+      p:iterate()
+    end
   end
   local skip=math.random()<self.ptn[9]:val()
   local dontskip=math.random(1,3)*(math.random()<0.0 and 1 or 0)
+  dontskip=velocity and 1 or dontskip
   if dontskip==0 then
     if self.ptn[1]:raw_val()==0 or self.muted or skip then
       do
@@ -104,15 +107,16 @@ function Instrument:emit(velocity)
       end
     end
   end
-
-  local velocity=self.ptn[1]:val()+self.ptn[2]:val()+self.ptn[3]:val()
-  velocity=velocity>0 and velocity or dontskip
+  if velocity==nil then
+    velocity=self.ptn[1]:val()+self.ptn[2]:val()+self.ptn[3]:val()
+    velocity=velocity>0 and velocity or dontskip
+  end
   local velocity_min_max={util.clamp(velocity-7,0,127),util.clamp(velocity+7,0,127)}
   velocity=math.random()*(velocity_min_max[2]-velocity_min_max[1])+velocity_min_max[1]
   local amp=1 -- to be set in parameters
-  local pan=util.clamp(params:get(self.name.."pan")+self.ptn[4]:val()+self.ptn[5]:val(),-1,1)
-  local rate=params:get(self.name.."rate")+self.ptn[6]:val()+self.ptn[7]:val()
-  local lpf=18000
+  pan=util.clamp(params:get(self.name.."pan")+(pan or (self.ptn[4]:val()+self.ptn[5]:val())),-1,1)
+  rate=params:get(self.name.."rate")+(rate or self.ptn[6]:val()+self.ptn[7]:val())
+  lpf=lpf or 18000
   local sendReverb=params:get(self.name.."reverbSend")/100
   local sendDelay=params:get(self.name.."delaySend")/100
   local reversed=self.ptn[8]:val()>0
@@ -124,6 +128,11 @@ function Instrument:emit(velocity)
   -- TODO implement prob and reverse
   self.playing=true
   self.show=true
+
+  if debounce_record[self.id] then
+    debounce_record[self.id]=false
+    do return end
+  end
   --print(self.name,velocity,amp,pan,rate,lpf,sendReverb,sendDelay,startPos)
   engine[self.name](velocity,amp,pan,rate,lpf,sendReverb,sendDelay,startPos)
   if params:get("midi_out")>1 then
