@@ -225,7 +225,10 @@ function GGrid:get_visual()
   -- show saved banks
   for i=1,16 do
     if drm[g_sel_drm].banks[i]~=nil then
-      self.visual[7][i]=10
+      self.visual[7][i]=7
+      if drm[g_sel_ptn].bankseq_current==i then
+        self.visual[7][i]=12
+      end
     end
   end
 

@@ -110,6 +110,7 @@ function init()
     for i,s in ipairs(data) do
       drm[i]:decode(s)
     end
+    params:set("record",0)
   end
 
   -- setup parameters

@@ -70,12 +70,11 @@ function Instrument:decode(s)
   local d=json.decode(s)
   if d~=nil then
     for _,k in ipairs(self.save) do
-      if k=="bankseq" then
-        self.bankseq:settable(d[k])
-      else
-        self[k]=d[k]
-      end
+      self[k]=d[k]
     end
+  end
+  if d["bankseq"]~=nil then 
+    self.bankseq:settable(d["bankseq"])
   end
   self:load_patterns(d.ptn)
 end
@@ -112,6 +111,7 @@ function Instrument:reset()
   for _,p in ipairs(self.ptn) do
     p:reset()
   end
+  self.bankseq:reset()
 end
 
 function Instrument:emit(velocity,pan,rate,lpf)
