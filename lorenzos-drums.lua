@@ -398,15 +398,17 @@ end
 function key(k,z)
   if k==1 then
     shift=z==1
-  elseif k>=2 and z==1 then
-    if shift and k==3 then
+  elseif k>=2 then
+    if shift and k==3 and z==1 then
       toggle_playing()
-    elseif shift then
+    elseif shift and z==1 then
       drm[g_sel_drm].ptn[g_sel_ptn]:set_finish((cursor[1]-1)*16+cursor[2])
       show_grid=30
-    else
+    elseif z==1 and cursor[1]<7 then
       drm[g_sel_drm].ptn[g_sel_ptn]:gdelta(cursor[1],cursor[2],k==2 and-1 or 1)
       show_grid=30
+    elseif cursor[1]==7 then 
+      g_:key_press(cursor[1],cursor[2],z==1)
     end
   end
 end

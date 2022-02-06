@@ -56,6 +56,10 @@ you can record quantized notes onto any track. enter recording mode by toggling 
 
 you can actually compose patterns in a text editor instead of using the grid/norns. simply [edit this file](https://github.com/schollz/lorenzos-drums/blob/main/lib/patterns.lua) in maiden or your favorite editor. follow the patterns in that file for naming/syntax. those patterns will be available to select and load from the `PARAMS` menu.
 
+**chaining patterns**
+
+chaining patterns is possible if you have multiple banks - chaining is instrument specific so it must be done on each individual drum piece. first record into several banks (hold a key on row 7 on the grid or on the emulated grid). then go into RECORD mode (on grid, make the two gesture buttons dimly lit, without grid simply enable `PARAMS > record`). now you can select banks and they are added to a "pattern" that will be executed immediately - changing to each new pattern when one finishes.
+
 **future**
 
 this isn't the final script I envisioned. but its fun to use, and I thought I'd share this iterations so that you might have some fun using it too. in the future I'd like to...

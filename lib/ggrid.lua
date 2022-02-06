@@ -89,11 +89,9 @@ function GGrid:key_press(row,col,on)
           msg("no saved bank "..col)
           do return end
         end
-        if self.mode==MODE_ERASE then
-          -- pattern bank
-          drm[g_sel_drm]:bankseq_add(col)
-        else
-          -- just load bnka
+        drm[g_sel_drm]:bankseq_add(col) -- set it to queue
+        if self.mode~=MODE_ERASE and params:get("record")==0 then
+          -- just load bank immediately
           drm[g_sel_drm]:bank_load(col)
           msg("loaded bank "..col)
         end
