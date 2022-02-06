@@ -65,7 +65,7 @@ this isn't the final script I envisioned. but its fun to use, and I thought I'd 
 - allow chaining patterns (in the nomenclature of this script it would be to chain loading of banks. I think this would be cool especially since banks are *instrument*-specific)
 - fix bugs (including one where the UI doesn't show open-hat well)
 
-ideas are welcome. code changes are especially welcome. if you want to send a PR, please don't hesitate. if you need help with a making a code change, please don't hesitate to ask.
+ideas are welcome. code changes are especially welcome. if you want to send a PR for something you'd like to add (or implement one of the ideas above), please don't hesitate. if you need help with a making a code change, please don't hesitate to ask.
 
 **is it possible to use other samples?**
 
