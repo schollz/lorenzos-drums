@@ -69,14 +69,14 @@ ideas are welcome. code changes are especially welcome. if you want to send a PR
 
 **is it possible to use other samples?**
 
-it is possible, but you'd have to make this change yourself in the engine code. the filenames for each sample of each instrument are hardcoded. the files exist in folders according to their mic position ("hat", "snare", and "kick" microphones), where each sample has the same name for each mic position. then the code has a matrix for each instrument, where the round-robin sample is specified in each column and each velocity layer in the row of the matrices in the engine - for example [see the assignment of kick samples](https://github.com/schollz/lorenzos-drums/blob/main/lib/LorenzosDrums.sc#L108-L115).
+it is possible, but you'd have to make this change yourself in the engine code. the filenames for each sample of each instrument are hard-coded. the files exist in folders according to their mic position ("hat", "snare", and "kick" microphones), where each sample has the same name for each mic position. then the code has a matrix for each instrument, where the round-robin sample is specified in each column and each velocity layer in the row of the matrices in the engine - for example [see the assignment of kick samples](https://github.com/schollz/lorenzos-drums/blob/main/lib/LorenzosDrums.sc#L108-L115).
 
 ## Install
 
 install using with
 
 ```
-;install https://github.com/schollz/lorenzos-samples
+;install https://github.com/schollz/lorenzos-drums
 ```
 
 once you run for the first time it will automatically download the samples (requires 200 MB of disk space).
