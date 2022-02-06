@@ -66,7 +66,7 @@ this isn't the final script I envisioned. but its fun to use, and I thought I'd 
 
 - add the ability for the drums to "evolve" (maybe similar to the [acid test script](https://llllllll.co/t/acid-test/52201)). there's something very solid about patterning in this way and I'd like to liquidate it somehow.
 - add more fx and make the current fx better (the current fx leave a lot to be desired)
-- allow chaining patterns (in the nomenclature of this script it would be to chain loading of banks. I think this would be cool especially since banks are *instrument*-specific)
+- ~~allow chaining patterns (in the nomenclature of this script it would be to chain loading of banks. I think this would be cool especially since banks are *instrument*-specific)~~ v0.2
 - fix bugs (including one where the UI doesn't show open-hat well)
 
 ideas are welcome. code changes are especially welcome. if you want to send a PR for something you'd like to add (or implement one of the ideas above), please don't hesitate. if you need help with a making a code change, please don't hesitate to ask.

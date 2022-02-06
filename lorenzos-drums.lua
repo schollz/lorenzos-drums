@@ -1,4 +1,4 @@
--- lorenzo's drums v0.1.0
+-- lorenzo's drums v0.2.0
 -- an electroacoustic drumset.
 --
 -- llllllll.co/t/lorenzos-drums
