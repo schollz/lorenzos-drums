@@ -88,7 +88,6 @@ function Slist:update()
 end
 
 function Slist:reset()
-  print("resetting")
   self.cur=self.start
   self.seq:reset()
 end
