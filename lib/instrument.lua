@@ -1,5 +1,6 @@
 local Instrument={}
 
+local s=require("sequins")
 local slist=include("lorenzos-drums/lib/slist")
 
 function Instrument:new(o)
