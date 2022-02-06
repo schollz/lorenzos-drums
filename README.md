@@ -11,7 +11,7 @@ this is a norns script that allows you to manipulate a high-quality drumset comp
 ## Requirements
 
 - norns
-- grid (optional)
+- 128 grid or midigrid (optional)
 - at least 200 MB of disk space (for downloaded samples)
 
 ## Documentation
@@ -60,7 +60,7 @@ you can actually compose patterns in a text editor instead of using the grid/nor
 
 this isn't the final script I envisioned. but its fun to use, and I thought I'd share this iterations so that you might have some fun using it too. in the future I'd like to...
 
-- add the ability for the drums to "evolve" (maybe similar to the [acid test script](https://llllllll.co/t/acid-test/52201). there's something very solid about patterning in this way and I'd like to liquidate it somehow.
+- add the ability for the drums to "evolve" (maybe similar to the [acid test script](https://llllllll.co/t/acid-test/52201)). there's something very solid about patterning in this way and I'd like to liquidate it somehow.
 - add more fx and make the current fx better (the current fx leave a lot to be desired)
 - allow chaning patterns (in the nomenclature of this script it would be to chain loading of banks. I think this would be cool especially since banks are *instrument*-specific)
 - fix bugs
