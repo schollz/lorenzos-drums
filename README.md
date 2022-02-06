@@ -56,6 +56,17 @@ you can record quantized notes onto any track. enter recording mode by toggling 
 
 you can actually compose patterns in a text editor instead of using the grid/norns. simply [edit this file](https://github.com/schollz/lorenzos-drums/blob/main/lib/patterns.lua) in maiden or your favorite editor. follow the patterns in that file for naming/syntax. those patterns will be available to select and load from the `PARAMS` menu.
 
+**future**
+
+this isn't the final script I envisioned. but its fun to use, and I thought I'd share this iterations so that you might have some fun using it too. in the future I'd like to...
+
+- add the ability for the drums to "evolve" (maybe similar to the [acid test script](https://llllllll.co/t/acid-test/52201). there's something very solid about patterning in this way and I'd like to liquidate it somehow.
+- add more fx and make the current fx better (the current fx leave a lot to be desired)
+- allow chaning patterns (in the nomenclature of this script it would be to chain loading of banks. I think this would be cool especially since banks are *instrument*-specific)
+- fix bugs
+
+ideas are welcome. code changes are especially welcome. if you want to send a PR, please don't hesitate. if you need help with a making a code change, please don't hesitate to ask.
+
 ## Install
 
 install using with
