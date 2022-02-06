@@ -14,7 +14,7 @@ function GGrid:new(args)
   m.grid_on=args.grid_on==nil and true or args.grid_on
 
   -- initiate the grid
-  local grid = util.file_exists(_path.code.."midigrid") and include "midigrid/lib/mg_128" or grid
+  local grid=util.file_exists(_path.code.."midigrid") and include "midigrid/lib/mg_128" or grid
   m.g=grid.connect()
   m.g.key=function(x,y,z)
     if m.grid_on then
@@ -84,11 +84,18 @@ function GGrid:key_press(row,col,on)
   if not on then
     if row==7 then
       if self.just_saved==nil or self.just_saved==false then
-        -- do a load
-        if drm[g_sel_drm]:bank_load(col) then
-          msg("loaded bank "..col)
-        else
+        -- make sure bank exists
+        if not drm[g_sel_drm]:bank_exists(col) then
           msg("no saved bank "..col)
+          do return end
+        end
+        if self.mode==MODE_ERASE then
+          -- pattern bank
+          drm[g_sel_drm]:bankseq_add(col)
+        else
+          -- just load bnka
+          drm[g_sel_drm]:bank_load(col)
+          msg("loaded bank "..col)
         end
       end
     end

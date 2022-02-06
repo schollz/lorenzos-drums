@@ -343,6 +343,10 @@ function msg(s,t)
   message_count=t or 20
 end
 
+function msg_startswith(s)
+  return message_text:find("^"..s)~=nil
+end
+
 function instrument_action(i)
   drm[i]:emit()
   if lattice_pattern[i].swing~=drm[i].swing then
@@ -482,6 +486,9 @@ function redraw()
     screen.stroke()
     screen.move(x,y+7)
     screen.text_center(message_text)
+    if message_count==0 then
+      message_text=""
+    end
   end
 
   screen.update()

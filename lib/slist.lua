@@ -93,8 +93,11 @@ function Slist:reset()
   self.seq:reset()
 end
 
+-- iterate will iterate the parameter
+-- and return whether it has returned to the beginning
 function Slist:iterate()
   self.cur=self.seq()
+  return self.seq.ix==1
 end
 
 function Slist:val()
