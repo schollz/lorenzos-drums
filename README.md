@@ -33,7 +33,7 @@ the first time you start you will have to wait for samples to download. once don
 
 ![image2](/img/150213789-cdaaab9c-9084-4c5d-857c-cb95744d9048.png)
 
-at the heart of lorenzo's drums are nine drum pieces (kick, snare, crossstick, closed hat, open hat, ride, low tom, mid tom, and high tom). each drum set piece has parameters that can be modulated by individual step sequences - including velocity, pan, rate, reverse, probability. each of these parameters are modulated by increasing the value of a step in its step sequencer. each parameter has its own sequener. each instrument has its own clock division and its own swing.
+at the heart of lorenzo's drums are nine drum pieces (kick, snare, cross-stick, closed hat, open hat, ride, low tom, mid tom, and high tom). each drum set piece has parameters that can be modulated by individual step sequences - including velocity, pan, rate, reverse, probability. each of these parameters are modulated by increasing the value of a step in its step sequencer. each parameter has its own sequencer. each instrument has its own clock division and its own swing.
 
 
 **grid**
@@ -46,7 +46,7 @@ https://vimeo.com/674023534
 
 **midi**
 
-midi output and input is supported. midi output is sent per channel, each instrument on its own channel (1-9). midi input by default is note based but can be changed in the settings. instrument triggers can also be midimapped so you can use a midi controller instead of a keyboard.
+midi output and input is supported. midi output is sent per channel, each instrument on its own channel (1-9). midi input by default is note based but can be changed in the settings. instrument triggers can also be midi-mapped so you can use a midi controller instead of a keyboard.
 
 **recording**
 
@@ -62,10 +62,14 @@ this isn't the final script I envisioned. but its fun to use, and I thought I'd 
 
 - add the ability for the drums to "evolve" (maybe similar to the [acid test script](https://llllllll.co/t/acid-test/52201)). there's something very solid about patterning in this way and I'd like to liquidate it somehow.
 - add more fx and make the current fx better (the current fx leave a lot to be desired)
-- allow chaning patterns (in the nomenclature of this script it would be to chain loading of banks. I think this would be cool especially since banks are *instrument*-specific)
+- allow chaining patterns (in the nomenclature of this script it would be to chain loading of banks. I think this would be cool especially since banks are *instrument*-specific)
 - fix bugs
 
 ideas are welcome. code changes are especially welcome. if you want to send a PR, please don't hesitate. if you need help with a making a code change, please don't hesitate to ask.
+
+**is it possible to use other samples?**
+
+it is possible, but you'd have to make this change yourself in the engine code. the filenames for each sample of each instrument are hardcoded. the files exist in folders according to their mic position ("hat", "snare", and "kick" microphones), where each sample has the same name for each mic position. then the code has a matrix for each instrument, where the round-robin sample is specified in each column and each velocity layer in the row of the matrices in the engine - for example [see the assignment of kick samples](https://github.com/schollz/lorenzos-drums/blob/main/lib/LorenzosDrums.sc#L108-L115).
 
 ## Install
 
