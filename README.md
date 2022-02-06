@@ -18,7 +18,7 @@ this is a norns script that allows you to manipulate a high-quality drumset comp
 
 **quickstart**
 
-the first time you start you will have to wait for samples to download. once done you can run by pressing **K1+K3**.
+the first time you start you will have to wait for samples to download. once done you can goto `PARAMS > choose pattern` and choose a pattern. then hit `PARAMS> load pattern`. then goto the main screen and press **K1+K3** to start the pattern.
 
 **guide**
 
