@@ -52,11 +52,9 @@ midi output and input is supported. midi output is sent per channel, each instru
 
 you can record quantized notes onto any track. enter recording mode by toggling `PARAMS > record`, or by going into "ERASE/REC" mode on the grid by making the last two buttons dim.
 
+**writing patterns**
 
-
-## todo
-
-- test division/swing
+you can actually compose patterns in a text editor instead of using the grid/norns. simply [edit this file](https://github.com/schollz/lorenzos-drums/blob/main/lib/patterns.lua) in maiden or your favorite editor. follow the patterns in that file for naming/syntax. those patterns will be available to select and load from the `PARAMS` menu.
 
 ## Install
 
