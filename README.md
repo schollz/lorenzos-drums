@@ -38,7 +38,11 @@ at the heart of lorenzo's drums are nine drum pieces (kick, snare, crossstick, c
 
 **grid**
 
-the grid works too. for example... (TODO) **🦗🦗🦗🦗** 
+for now - please refer to this tutorial video:
+
+https://vimeo.com/674023534
+
+(if anyone wants to supply a grid layout I would be exceedingly happy)
 
 **midi**
 
