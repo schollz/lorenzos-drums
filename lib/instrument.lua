@@ -1,5 +1,6 @@
 local Instrument={}
 
+local s=require("sequins")
 local slist=include("lorenzos-drums/lib/slist")
 
 function Instrument:new(o)
@@ -38,7 +39,21 @@ function Instrument:new(o)
   o.show=false
   o.banks={}
   o.save={"id","name","swing","division","banks"}
+  o.bankseq=s{0}
+  o.bankseq_current=0
   return o
+end
+
+function Instrument:bankseq_add(i)
+  local seq={}
+  if msg_startswith("ptn") then
+    for _,v in ipairs(self.bankseq.data) do
+      table.insert(seq,v)
+    end
+  end
+  table.insert(seq,i)
+  self.bankseq:settable(seq)
+  msg("ptn: "..table.concat(seq,"-"))
 end
 
 function Instrument:encode()
@@ -46,6 +61,7 @@ function Instrument:encode()
   for _,key in ipairs(self.save) do
     d[key]=self[key]
   end
+  d["bankseq"]=self.bankseq.data
   d.ptn=self:dump_patterns()
   return json.encode(d)
 end
@@ -57,6 +73,9 @@ function Instrument:decode(s)
       self[k]=d[k]
     end
   end
+  if d["bankseq"]~=nil then 
+    self.bankseq:settable(d["bankseq"])
+  end
   self:load_patterns(d.ptn)
 end
 
@@ -64,13 +83,15 @@ function Instrument:bank_save(i)
   self.banks[i]=self:dump_patterns()
 end
 
-function Instrument:bank_load(i)
-  if self.banks[i]==nil then
-    do return false end
-  end
+function Instrument:bank_exists(i)
+  return self.banks[i]~=nil
+end
 
-  self:load_patterns(self.banks[i])
-  return true
+function Instrument:bank_load(i)
+  self.bankseq_current=i
+  if self:bank_exists(i) then
+    self:load_patterns(self.banks[i])
+  end
 end
 
 function Instrument:dump_patterns()
@@ -91,13 +112,22 @@ function Instrument:reset()
   for _,p in ipairs(self.ptn) do
     p:reset()
   end
+  self.bankseq:reset()
 end
 
 function Instrument:emit(velocity,pan,rate,lpf)
   self.playing=false
   if velocity==nil then
-    for _,p in ipairs(self.ptn) do
-      p:iterate()
+    for i,p in ipairs(self.ptn) do
+      local has_reset=p:iterate()
+      if i==1 and has_reset then
+        -- swap banks
+        local bankseq_new=self.bankseq()
+        if bankseq_new>0 and self.bankseq_current~=bankseq_new then
+          print(self.name..": switching to bank "..bankseq_new)
+          self:bank_load(bankseq_new)
+        end
+      end
     end
   end
   local skip=math.random()<self.ptn[9]:val()

@@ -1,4 +1,4 @@
--- lorenzo's drums v0.1.0
+-- lorenzo's drums v0.2.0
 -- an electroacoustic drumset.
 --
 -- llllllll.co/t/lorenzos-drums
@@ -18,7 +18,7 @@ if not string.find(package.cpath,"/home/we/dust/code/lorenzos-drums/lib/") then
   package.cpath=package.cpath..";/home/we/dust/code/lorenzos-drums/lib/?.so"
 end
 json=require("cjson")
-lattice_=require("lattice")
+lattice_=include("lorenzos-drums/lib/lattice")
 instrument_=include("lorenzos-drums/lib/instrument")
 ggrid=include("lorenzos-drums/lib/ggrid")
 drum_patterns=include("lorenzos-drums/lib/patterns")
@@ -110,6 +110,7 @@ function init()
     for i,s in ipairs(data) do
       drm[i]:decode(s)
     end
+    params:set("record",0)
   end
 
   -- setup parameters
@@ -343,6 +344,10 @@ function msg(s,t)
   message_count=t or 20
 end
 
+function msg_startswith(s)
+  return message_text:find("^"..s)~=nil
+end
+
 function instrument_action(i)
   drm[i]:emit()
   if lattice_pattern[i].swing~=drm[i].swing then
@@ -393,15 +398,17 @@ end
 function key(k,z)
   if k==1 then
     shift=z==1
-  elseif k>=2 and z==1 then
-    if shift and k==3 then
+  elseif k>=2 then
+    if shift and k==3 and z==1 then
       toggle_playing()
-    elseif shift then
+    elseif shift and z==1 then
       drm[g_sel_drm].ptn[g_sel_ptn]:set_finish((cursor[1]-1)*16+cursor[2])
       show_grid=30
-    else
+    elseif z==1 and cursor[1]<7 then
       drm[g_sel_drm].ptn[g_sel_ptn]:gdelta(cursor[1],cursor[2],k==2 and-1 or 1)
       show_grid=30
+    elseif cursor[1]==7 then
+      g_:key_press(cursor[1],cursor[2],z==1)
     end
   end
 end
@@ -482,6 +489,9 @@ function redraw()
     screen.stroke()
     screen.move(x,y+7)
     screen.text_center(message_text)
+    if message_count==0 then
+      message_text=""
+    end
   end
 
   screen.update()

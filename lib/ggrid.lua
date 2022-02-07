@@ -14,7 +14,7 @@ function GGrid:new(args)
   m.grid_on=args.grid_on==nil and true or args.grid_on
 
   -- initiate the grid
-  local grid = util.file_exists(_path.code.."midigrid") and include "midigrid/lib/mg_128" or grid
+  local grid=util.file_exists(_path.code.."midigrid") and include "midigrid/lib/mg_128" or grid
   m.g=grid.connect()
   m.g.key=function(x,y,z)
     if m.grid_on then
@@ -84,11 +84,16 @@ function GGrid:key_press(row,col,on)
   if not on then
     if row==7 then
       if self.just_saved==nil or self.just_saved==false then
-        -- do a load
-        if drm[g_sel_drm]:bank_load(col) then
-          msg("loaded bank "..col)
-        else
+        -- make sure bank exists
+        if not drm[g_sel_drm]:bank_exists(col) then
           msg("no saved bank "..col)
+          do return end
+        end
+        drm[g_sel_drm]:bankseq_add(col) -- set it to queue
+        if self.mode~=MODE_ERASE and params:get("record")==0 then
+          -- just load bank immediately
+          drm[g_sel_drm]:bank_load(col)
+          msg("loaded bank "..col)
         end
       end
     end
@@ -183,7 +188,9 @@ function GGrid:set_drm(i)
     -- toggle mute
     drm[i].muted=not drm[i].muted
   end
-  trigger_ins(i)
+  if self.mode==MODE_LENGTH or self.mode==MODE_ERASE or (not lattice.enabled) then
+    trigger_ins(i)
+  end
   g_sel_drm=i
 end
 
@@ -218,7 +225,10 @@ function GGrid:get_visual()
   -- show saved banks
   for i=1,16 do
     if drm[g_sel_drm].banks[i]~=nil then
-      self.visual[7][i]=10
+      self.visual[7][i]=4
+      if drm[g_sel_drm].bankseq_current==i then
+        self.visual[7][i]=12
+      end
     end
   end
 
