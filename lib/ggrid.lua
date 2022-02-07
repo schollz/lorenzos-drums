@@ -188,7 +188,9 @@ function GGrid:set_drm(i)
     -- toggle mute
     drm[i].muted=not drm[i].muted
   end
-  trigger_ins(i)
+  if self.mode==MODE_LENGTH or self.mode==MODE_ERASE then
+    trigger_ins(i)
+  end
   g_sel_drm=i
 end
 
