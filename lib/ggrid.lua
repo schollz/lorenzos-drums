@@ -188,7 +188,7 @@ function GGrid:set_drm(i)
     -- toggle mute
     drm[i].muted=not drm[i].muted
   end
-  if self.mode==MODE_LENGTH or self.mode==MODE_ERASE then
+  if self.mode==MODE_LENGTH or self.mode==MODE_ERASE or (not lattice.enabled) then
     trigger_ins(i)
   end
   g_sel_drm=i
@@ -225,8 +225,8 @@ function GGrid:get_visual()
   -- show saved banks
   for i=1,16 do
     if drm[g_sel_drm].banks[i]~=nil then
-      self.visual[7][i]=7
-      if drm[g_sel_ptn].bankseq_current==i then
+      self.visual[7][i]=4
+      if drm[g_sel_drm].bankseq_current==i then
         self.visual[7][i]=12
       end
     end

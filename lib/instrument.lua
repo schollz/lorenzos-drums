@@ -88,6 +88,7 @@ function Instrument:bank_exists(i)
 end
 
 function Instrument:bank_load(i)
+  self.bankseq_current=i
   if self:bank_exists(i) then
     self:load_patterns(self.banks[i])
   end
@@ -124,8 +125,7 @@ function Instrument:emit(velocity,pan,rate,lpf)
         local bankseq_new=self.bankseq()
         if bankseq_new>0 and self.bankseq_current~=bankseq_new then
           print(self.name..": switching to bank "..bankseq_new)
-          self.bankseq_current=bankseq_new
-          self:bank_load(self.bankseq_current)
+          self:bank_load(bankseq_new)
         end
       end
     end
