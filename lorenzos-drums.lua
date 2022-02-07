@@ -18,7 +18,7 @@ if not string.find(package.cpath,"/home/we/dust/code/lorenzos-drums/lib/") then
   package.cpath=package.cpath..";/home/we/dust/code/lorenzos-drums/lib/?.so"
 end
 json=require("cjson")
-lattice_=require("lattice")
+lattice_=include("lorenzos-drums/lib/lattice")
 instrument_=include("lorenzos-drums/lib/instrument")
 ggrid=include("lorenzos-drums/lib/ggrid")
 drum_patterns=include("lorenzos-drums/lib/patterns")
@@ -407,7 +407,7 @@ function key(k,z)
     elseif z==1 and cursor[1]<7 then
       drm[g_sel_drm].ptn[g_sel_ptn]:gdelta(cursor[1],cursor[2],k==2 and-1 or 1)
       show_grid=30
-    elseif cursor[1]==7 then 
+    elseif cursor[1]==7 then
       g_:key_press(cursor[1],cursor[2],z==1)
     end
   end
